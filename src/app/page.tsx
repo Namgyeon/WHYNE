@@ -1,7 +1,14 @@
+import styles from "./page.module.css";
+import WineTypeSelector from "@/components/Button/filter/WineTypeSelector";
+import PriceSlider from "@/components/Button/filter/PriceSlider";
+import RatingFilter from "@/components/Button/filter/RatingFilter";
+
 export default function Home() {
   return (
     <div>
-      <p className="text-black text-2xl-24px-bold">테스트</p>
+      <WineTypeSelector />
+      <PriceSlider />
+      <RatingFilter />
     </div>
   );
 }
