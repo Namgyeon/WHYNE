@@ -1,6 +1,10 @@
+"use client";
 import Icon from "@/components/Icon/Icon";
+import ModalReviewAdd from "@/components/Modal/ModalReviewAdd/ModalReviewAdd";
+import { useState } from "react";
 
 export default function GiyeonTest() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <>
       <div>
@@ -49,6 +53,18 @@ export default function GiyeonTest() {
           <Icon name="visibility" size={40} viewBox="0 0 24 24" />
           <Icon name="unVisibility" size={40} viewBox="0 0 24 24" />
         </div>
+      </div>
+      <div>
+        <button
+          className="px-4 py-2 bg-blue-500 text-white rounded-md"
+          onClick={() => setIsModalOpen(true)}
+        >
+          모달 열기
+        </button>
+        <ModalReviewAdd
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
       </div>
     </>
   );
