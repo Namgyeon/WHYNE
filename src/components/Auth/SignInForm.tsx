@@ -119,7 +119,12 @@ export default function SignInForm() {
         )}
       </article>
       <section className="flex flex-col gap-[16px] w-full">
-        <Button variant="button" className="w-full h-[48px] md:h-[50px]">
+        <Button
+          variant="button"
+          className="w-full h-[48px] md:h-[50px]"
+          disabled={!isValid}
+          onClick={handleSubmit(onSubmit)}
+        >
           로그인
         </Button>
         <Button
