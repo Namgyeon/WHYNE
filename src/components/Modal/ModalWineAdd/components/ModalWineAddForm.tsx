@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import axios from "axios"; // api 수정해야 함
+//import axios from "axios";
 import Button from "@/components/Button/button";
 import { Input, InputFile, InputSelect, Label } from "@/components/Input";
 
@@ -34,22 +34,22 @@ export default function ModalWineAddForm({
   };
 
   // 이미지 업로드 함수 (수정해야함)
-  const uploadImage = async (file: File): Promise<string> => {
-    const formData = new FormData();
-    formData.append("file", file);
+  // const uploadImage = async (file: File): Promise<string> => {
+  //   const formData = new FormData();
+  //   formData.append("file", file);
 
-    try {
-      const response = await axios.post("/images/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      return response.data.imageUrl; // 서버에서 반환된 이미지 URL
-    } catch (error) {
-      console.error("이미지 업로드 실패", error);
-      throw new Error("이미지 업로드 실패");
-    }
-  };
+  //   try {
+  //     const response = await axios.post("/images/upload", formData, {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //     });
+  //     return response.data.imageUrl; // 서버에서 반환된 이미지 URL
+  //   } catch (error) {
+  //     console.error("이미지 업로드 실패", error);
+  //     throw new Error("이미지 업로드 실패");
+  //   }
+  // };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,7 +58,7 @@ export default function ModalWineAddForm({
 
     if (file) {
       try {
-        imageUrl = await uploadImage(file); // 파일 있으면 업로드 후 URL 반환
+        //imageUrl = await uploadImage(file); // 파일 있으면 업로드 후 URL 반환
       } catch (error) {
         console.error("이미지 업로드 실패:", error);
         return;
