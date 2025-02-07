@@ -1,8 +1,26 @@
 "use client";
 
-import { useState } from "react";
+type FlavorSliderProps = {
+  lightBold: number;
+  setLightBold: (value: number) => void;
+  smoothTannic: number;
+  setSmoothTannic: (value: number) => void;
+  drySweet: number;
+  setDrySweet: (value: number) => void;
+  softAcidic: number;
+  setSoftAcidic: (value: number) => void;
+};
 
-const WineSliders = () => {
+export default function FlavorSlider({
+  lightBold,
+  setLightBold,
+  smoothTannic,
+  setSmoothTannic,
+  drySweet,
+  setDrySweet,
+  softAcidic,
+  setSoftAcidic,
+}: FlavorSliderProps) {
   const sliders = [
     { label: "바디감", leftLabel: "가벼워요", rightLabel: "진해요" },
     { label: "타닌", leftLabel: "부드러워요", rightLabel: "떫어요" },
@@ -10,12 +28,15 @@ const WineSliders = () => {
     { label: "산미", leftLabel: "안셔요", rightLabel: "많이셔요" },
   ];
 
-  const [values, setValues] = useState([50, 30, 40, 20]);
+  // props로 받은 상태값을 배열 형태로 정리 (순서 유지)
+  const values = [lightBold, smoothTannic, drySweet, softAcidic];
+
+  // 각 슬라이더의 setter 함수를 매핑
+  const setters = [setLightBold, setSmoothTannic, setDrySweet, setSoftAcidic];
 
   const handleChange = (index: number, value: number) => {
-    const newValues = [...values];
-    newValues[index] = value;
-    setValues(newValues);
+    // 해당하는 setter 함수 호출하여 상태 업데이트
+    setters[index](value);
   };
 
   return (
@@ -40,8 +61,7 @@ const WineSliders = () => {
               value={values[index]}
               onChange={(e) => handleChange(index, Number(e.target.value))}
               className="w-[260px] h-[6px] appearance-none bg-[#CFDBEA] rounded-full cursor-pointer 
-                         accent-[#6A42DB]
-"
+                         accent-[#6A42DB]"
             />
 
             <span className="text-[16px] font-medium text-[#2D3034]">
@@ -52,6 +72,4 @@ const WineSliders = () => {
       ))}
     </div>
   );
-};
-
-export default WineSliders;
+}
