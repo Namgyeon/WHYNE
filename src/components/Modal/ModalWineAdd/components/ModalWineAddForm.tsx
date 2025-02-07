@@ -1,8 +1,9 @@
 "use client";
 
+import { useState } from "react";
+import axios from "axios"; // api 수정해야 함
 import Button from "@/components/Button/button";
 import { Input, InputFile, InputSelect, Label } from "@/components/Input";
-import { useState } from "react";
 
 type ModalWineFormProps = {
   onSubmit: (data: {
@@ -19,23 +20,58 @@ export default function ModalWineAddForm({
   onSubmit,
   onClose,
 }: ModalWineFormProps) {
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState<number | "">("");
-  const [region, setRegion] = useState("");
-  const [type, setType] = useState("");
-  //const [image, setImage] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    price: "" as number | "",
+    region: "",
+    type: "",
+    image: "", // 최종적으로 URL을 저장할 필드
+  });
 
-  // InputFile 테스트용
-  const [image, setImage] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(null);
   const handleFileChange = (name: string, file: File | null) => {
-    setImage(file);
-    console.log("선택한 파일:", file);
+    setFile(file);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit({ name, price: price === "" ? 0 : price, region, type, image });
+  // 이미지 업로드 함수 (수정해야함)
+  const uploadImage = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await axios.post("/images/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response.data.imageUrl; // 서버에서 반환된 이미지 URL
+    } catch (error) {
+      console.error("이미지 업로드 실패", error);
+      throw new Error("이미지 업로드 실패");
+    }
   };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    let imageUrl = formData.image; // 기존 URL 사용
+
+    if (file) {
+      try {
+        imageUrl = await uploadImage(file); // 파일 있으면 업로드 후 URL 반환
+      } catch (error) {
+        console.error("이미지 업로드 실패:", error);
+        return;
+      }
+    }
+
+    onSubmit({
+      ...formData,
+      price: formData.price === "" ? 0 : formData.price,
+      image: imageUrl, // 최종적으로 업로드 된 이미지 URL 저장
+    });
+  };
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -46,8 +82,8 @@ export default function ModalWineAddForm({
         <Input
           id="name"
           type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           placeholder="와인 이름 입력"
           required
         />
@@ -57,8 +93,10 @@ export default function ModalWineAddForm({
         <Input
           id="price"
           type="number"
-          value={price}
-          onChange={(e) => setPrice(Number(e.target.value))}
+          value={formData.price}
+          onChange={(e) =>
+            setFormData({ ...formData, price: Number(e.target.value) })
+          }
           placeholder="가격 입력"
           required
         />
@@ -68,8 +106,8 @@ export default function ModalWineAddForm({
         <Input
           id="region"
           type="text"
-          value={region}
-          onChange={(e) => setRegion(e.target.value)}
+          value={formData.region}
+          onChange={(e) => setFormData({ ...formData, region: e.target.value })}
           placeholder="원산지 입력"
           required
         />
@@ -79,8 +117,8 @@ export default function ModalWineAddForm({
         <InputSelect
           id="type"
           options={["Red", "White", "Sparkling"]}
-          selectedValue={type}
-          onChange={setType}
+          selectedValue={formData.type}
+          onChange={(value) => setFormData({ ...formData, type: value })}
         />
       </div>
       <div>
@@ -88,7 +126,7 @@ export default function ModalWineAddForm({
         <InputFile
           id="image"
           name="image"
-          value={image}
+          value={file}
           onChange={handleFileChange}
         />
       </div>

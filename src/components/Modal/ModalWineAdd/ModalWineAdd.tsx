@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import ModalWineAddHeader from "./components/ModalWineAddHeader";
-import ModalWineAddForm from "./components/ModalWinedAddForm";
+import ModalWineAddForm from "./components/ModalWineAddForm";
 
 type ModalWindAddProps = {
   isOpen: boolean;
