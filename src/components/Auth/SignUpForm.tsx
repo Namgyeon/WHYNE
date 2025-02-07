@@ -161,7 +161,7 @@ export default function SignUpForm() {
 
       <Button
         variant="button"
-        className="w-full h-12"
+        className="w-full h-[48px] md:h-[50px]"
         disabled={!isValid}
         onClick={handleSubmit(onSubmit)}
       >
