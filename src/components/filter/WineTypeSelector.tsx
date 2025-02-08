@@ -8,6 +8,10 @@ interface WineTypeSelectorProps {
 }
 
 const WineTypeSelector: React.FC<WineTypeSelectorProps> = ({ selectedType, setSelectedType }) => {
+  const [localSelectedType, setLocalSelectedType] = useState("White");
+  const actualSelectedType = selectedType ?? localSelectedType;
+  const actualSetSelectedType = setSelectedType ?? setLocalSelectedType;
+  
   const buttons = [
     { label: "Red", width: "w-[65px]", border: "rounded-tl-full" },
     { label: "White", width: "w-[79px]", border: "" },
@@ -22,11 +26,11 @@ const WineTypeSelector: React.FC<WineTypeSelectorProps> = ({ selectedType, setSe
       <div className="flex space-x-2">
         {buttons.map((btn) => (
           <button
-            key={btn.label}
-            onClick={() => setSelectedType(btn.label)}
-            className={`h-[42px] px-[18px] py-[10px] border border-[#CFDBEA] ${btn.width} ${btn.border} rounded-full 
-              ${selectedType === btn.label ? "bg-[#6A42DB] text-white" : "bg-white text-black"}`}
-          >
+          key={btn.label}
+          onClick={() => actualSetSelectedType(btn.label)}
+          className={`h-[42px] px-[18px] py-[10px] border border-[#CFDBEA] ${btn.width} ${btn.border} rounded-full 
+            ${actualSelectedType === btn.label ? "bg-[#6A42DB] text-white" : "bg-white text-black"}`}
+        >
             {btn.label}
           </button>
         ))}
