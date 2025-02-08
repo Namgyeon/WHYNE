@@ -13,13 +13,24 @@ import { useState } from "react";
 // 리팩토링때 좀 더 쉬운 방법 고안.
 
 export default function ModalReviewForm() {
-  const [values, setValues] = useState({
+  const [values, setValues] = useState<{
+    rating: number;
+    content: string;
+    lightBold: number;
+    smoothTannic: number;
+    drySweet: number;
+    softAcidic: number;
+    aroma: string[];
+    wineId: number;
+  }>({
     rating: 0,
     content: "",
     lightBold: 0,
     smoothTannic: 0,
     drySweet: 0,
     softAcidic: 0,
+    aroma: [],
+    wineId: 0,
   });
   return (
     <div className="flex flex-col gap-10">
@@ -45,7 +56,10 @@ export default function ModalReviewForm() {
           setValues((prev) => ({ ...prev, softAcidic }))
         }
       />
-      <ModalReviewSmell />
+      <ModalReviewSmell
+        aroma={values.aroma}
+        setAroma={(aroma) => setValues((prev) => ({ ...prev, aroma }))}
+      />
       <Button>리뷰 남기기</Button>
     </div>
   );
