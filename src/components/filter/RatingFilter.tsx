@@ -3,10 +3,8 @@
 import { useState } from "react";
 
 const RatingFilter = ({ selectedRating, setSelectedRating }: { selectedRating?: string; setSelectedRating?: (rating: string) => void }) => {
-  // ✅ 내부 상태 추가 (부모에서 props를 안 넘겨주면 이걸 사용)
   const [localSelectedRating, setLocalSelectedRating] = useState("all");
 
-  // ✅ 부모에서 값을 넘겨주면 사용하고, 없으면 내부 상태 사용
   const actualSelectedRating = selectedRating ?? localSelectedRating;
   const actualSetSelectedRating = setSelectedRating ?? setLocalSelectedRating;
 

@@ -3,10 +3,8 @@
 import { useState } from "react";
 
 const WineTypeSelector = ({ selectedType, setSelectedType }: { selectedType?: string; setSelectedType?: (type: string) => void }) => {
-  // ✅ 내부 상태 추가 (부모가 안 넘겨주면 이걸 사용)
   const [localSelectedType, setLocalSelectedType] = useState("White");
 
-  // ✅ 부모가 값을 넘겨주면 사용하고, 안 넘기면 내부 상태 사용
   const actualSelectedType = selectedType ?? localSelectedType;
   const actualSetSelectedType = setSelectedType ?? setLocalSelectedType;
 
