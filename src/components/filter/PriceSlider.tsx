@@ -2,11 +2,19 @@
 
 import { useRef, useState } from "react";
 
-const PriceSlider = () => {
+const PriceSlider = ({ minPrice: externalMinPrice, maxPrice: externalMaxPrice, setMinPrice: externalSetMinPrice, setMaxPrice: externalSetMaxPrice }: 
+  { minPrice?: number; maxPrice?: number; setMinPrice?: (value: number) => void; setMaxPrice?: (value: number) => void }) => {
   const sliderRef = useRef(null);
 
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(100000);
+  // ✅ 내부 상태 추가 (부모에서 props를 안 넘겨주면 이걸 사용)
+  const [localMinPrice, setLocalMinPrice] = useState(0);
+  const [localMaxPrice, setLocalMaxPrice] = useState(100000);
+
+  // ✅ 부모에서 값을 넘겨주면 사용하고, 없으면 내부 상태 사용
+  const minPrice = externalMinPrice ?? localMinPrice;
+  const maxPrice = externalMaxPrice ?? localMaxPrice;
+  const setMinPrice = externalSetMinPrice ?? setLocalMinPrice;
+  const setMaxPrice = externalSetMaxPrice ?? setLocalMaxPrice;
 
   const handleStart = (type) => (event) => {
     event.preventDefault();

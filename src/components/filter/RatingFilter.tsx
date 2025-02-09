@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 
-const RatingFilter = ({ selectedRating: externalSelectedRating, setSelectedRating: externalSetSelectedRating }) => {
-  // ✅ 내부 상태 추가 (부모가 안 넘겨주면 사용)
-  const [internalSelectedRating, setInternalSelectedRating] = useState("all");
+const RatingFilter = ({ selectedRating, setSelectedRating }: { selectedRating?: string; setSelectedRating?: (rating: string) => void }) => {
+  // ✅ 내부 상태 추가 (부모에서 props를 안 넘겨주면 이걸 사용)
+  const [localSelectedRating, setLocalSelectedRating] = useState("all");
 
-  // ✅ 부모가 상태를 넘겨주면 사용, 안 넘겨주면 내부 상태 사용
-  const selectedRating = externalSelectedRating ?? internalSelectedRating;
-  const setSelectedRating = externalSetSelectedRating ?? setInternalSelectedRating;
+  // ✅ 부모에서 값을 넘겨주면 사용하고, 없으면 내부 상태 사용
+  const actualSelectedRating = selectedRating ?? localSelectedRating;
+  const actualSetSelectedRating = setSelectedRating ?? setLocalSelectedRating;
 
   const ratings = [
     { label: "전체", value: "all" },
@@ -29,15 +29,15 @@ const RatingFilter = ({ selectedRating: externalSelectedRating, setSelectedRatin
             type="radio"
             name="rating"
             value={item.value}
-            checked={selectedRating === item.value}
-            onChange={() => setSelectedRating(item.value)} // ✅ setSelectedRating이 항상 함수가 되도록 보장
+            checked={actualSelectedRating === item.value}
+            onChange={() => actualSetSelectedRating(item.value)} // ✅ props가 없으면 내부 상태를 변경
             className="hidden"
           />
           <div
             className={`w-[20px] h-[20px] border border-[#6A42DB] rounded-md flex items-center justify-center 
-              ${selectedRating === item.value ? "bg-[#EDEBFE] border-2 border-[#6A42DB]" : "bg-white border-[#6A42DB]"}`}
+              ${actualSelectedRating === item.value ? "bg-[#EDEBFE] border-2 border-[#6A42DB]" : "bg-white border-[#6A42DB]"}`}
           >
-            {selectedRating === item.value && <div className="w-[12px] h-[12px] bg-[#6A42DB] rounded-md"></div>}
+            {actualSelectedRating === item.value && <div className="w-[12px] h-[12px] bg-[#6A42DB] rounded-md"></div>}
           </div>
           <span className="text-[16px] font-medium leading-[26px] text-[#2D3034]" style={{ fontFamily: "Pretendard" }}>
             {item.label}
