@@ -2,16 +2,14 @@
 
 import { useState } from "react";
 
-interface WineTypeSelectorProps {
-  selectedType: string;
-  setSelectedType: (type: string) => void;
-}
-
-const WineTypeSelector: React.FC<WineTypeSelectorProps> = ({ selectedType, setSelectedType }) => {
+const WineTypeSelector = ({ selectedType, setSelectedType }: { selectedType?: string; setSelectedType?: (type: string) => void }) => {
+  // ✅ 내부 상태 추가 (부모가 안 넘겨주면 이걸 사용)
   const [localSelectedType, setLocalSelectedType] = useState("White");
+
+  // ✅ 부모가 값을 넘겨주면 사용하고, 안 넘기면 내부 상태 사용
   const actualSelectedType = selectedType ?? localSelectedType;
   const actualSetSelectedType = setSelectedType ?? setLocalSelectedType;
-  
+
   const buttons = [
     { label: "Red", width: "w-[65px]", border: "rounded-tl-full" },
     { label: "White", width: "w-[79px]", border: "" },
@@ -26,11 +24,11 @@ const WineTypeSelector: React.FC<WineTypeSelectorProps> = ({ selectedType, setSe
       <div className="flex space-x-2">
         {buttons.map((btn) => (
           <button
-          key={btn.label}
-          onClick={() => actualSetSelectedType(btn.label)}
-          className={`h-[42px] px-[18px] py-[10px] border border-[#CFDBEA] ${btn.width} ${btn.border} rounded-full 
-            ${actualSelectedType === btn.label ? "bg-[#6A42DB] text-white" : "bg-white text-black"}`}
-        >
+            key={btn.label}
+            onClick={() => actualSetSelectedType(btn.label)}
+            className={`h-[42px] px-[18px] py-[10px] border border-[#CFDBEA] ${btn.width} ${btn.border} rounded-full 
+              ${actualSelectedType === btn.label ? "bg-[#6A42DB] text-white" : "bg-white text-black"}`}
+          >
             {btn.label}
           </button>
         ))}
