@@ -35,6 +35,7 @@ export default function KakaoCallback() {
       authenticateWithKakao();
     } else {
       console.error("code 파라미터가 없습니다."); // code가 없을 경우 오류 출력
+      router.push("/signin");
     }
   }, [code, router]);
 

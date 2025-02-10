@@ -1,41 +1,25 @@
-import { registerKakaoOAuthApp } from "@/lib/api/oauth";
 import axios from "axios";
+import { socialSignIn } from "./auth";
 
 // 카카오 로그인 처리 함수
 export const signInWithKakao = async (code: string) => {
   try {
-    // 여기서 `appKey`는 카카오의 REST API Key로, 환경 변수에서 불러옵니다.
-    const response = await registerKakaoOAuthApp(
-      process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID!
-    );
+    console.log("카카오 로그인 인증 코드:", code);
 
-    // 카카오 로그인 API 호출 후, access_token과 refresh_token을 얻어오는 부분
-    // 카카오는 'code'를 통해 서버에서 토큰을 발급받을 수 있습니다.
-    const tokenResponse = await axios.post(
-      "https://kauth.kakao.com/oauth/token",
-      new URLSearchParams({
-        grant_type: "authorization_code",
-        client_id: process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID!, // 카카오 REST API Key
-        redirect_uri: process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI!, // 카카오 리다이렉트 URI
-        code: code, // 인증 코드
-      }),
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded", // 필수 헤더 설정
-        },
-      }
-    );
-    const { access_token, refresh_token } = tokenResponse.data;
+    // ✅ 1. 백엔드 API로 카카오 인증 코드 전송
+    const response = await socialSignIn(code); // socialSignIn 함수 호출
 
-    // 로컬스토리지에 access_token과 refresh_token 저장
-    localStorage.setItem("access_token", access_token);
-    localStorage.setItem("refresh_token", refresh_token);
+    // ✅ 2. 백엔드에서 받은 토큰 응답
+    const { accessToken, refreshToken, user } = response;
 
-    console.log("카카오 로그인 성공:", tokenResponse.data);
-
-    return tokenResponse.data;
+    console.log("✅ 카카오 로그인 성공, 액세스 토큰:", accessToken);
+    console.log("✅ 사용자 정보:", user);
+    return { accessToken, refreshToken, user }; // 필요에 따라 리턴할 데이터 처리
   } catch (error) {
-    console.error("카카오 로그인 실패:", error);
+    console.error(
+      "❌ 카카오 로그인 실패:",
+      error.response?.data || error.message
+    );
     throw error;
   }
 };
