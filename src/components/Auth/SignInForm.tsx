@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
@@ -13,6 +13,10 @@ import Image from "next/image";
 import Icon from "../Icon/Icon";
 
 import { signIn } from "@/lib/api/auth";
+import { signInWithKakao } from "@/lib/api/kakaoAuth";
+
+const KAKAO_CLIENT_ID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID!;
+const KAKAO_REDIRECT_URI = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI!;
 
 export default function SignInForm() {
   const {
@@ -58,6 +62,32 @@ export default function SignInForm() {
       });
     }
   };
+
+  const handleKakaoLogin = () => {
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
+    window.location.href = kakaoAuthUrl;
+  };
+
+  // 카카오 인증 후 redirect URI에서 code 파라미터를 받아오는 useEffect
+  useEffect(() => {
+    const code = new URLSearchParams(window.location.search).get("code");
+    if (code) {
+      const getKakaoToken = async () => {
+        try {
+          const response = await signInWithKakao(code); // 백엔드에서 카카오 토큰 받아오기
+          console.log("카카오 로그인 성공:", response);
+
+          // 로그인 성공 후 홈으로 리디렉션
+          router.push("/"); // 홈 화면으로 이동
+        } catch (error) {
+          console.error("카카오 로그인 실패:", error);
+          // 실패 시 처리
+        }
+      };
+
+      getKakaoToken();
+    }
+  }, [window.location.search]); // URL에 변경이 있을 때마다 실행
 
   return (
     <form
@@ -130,6 +160,7 @@ export default function SignInForm() {
         <Button
           variant="social"
           className="w-full h-[48px] md:h-[50px] text-lg-16px-medium hover:bg-yellow-300 hover:border-none hover:text-yellow-950"
+          onClick={handleKakaoLogin}
         >
           <Icon
             name="kakao"

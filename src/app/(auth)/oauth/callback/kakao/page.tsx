@@ -11,6 +11,8 @@ export default function KakaoCallback() {
   const code = searchParams.get("code"); // URL에서 'code' 파라미터 추출
 
   useEffect(() => {
+    console.log("URL에서 받은 code:", code); // 여기에 code 값을 출력
+
     if (code) {
       // 카카오 OAuth 인증 코드가 존재하면 서버에서 액세스 토큰을 얻어옴
       const authenticateWithKakao = async () => {
@@ -21,13 +23,18 @@ export default function KakaoCallback() {
           // 로그인 성공 후 홈 화면으로 리디렉션
           router.push("/");
         } catch (error) {
-          console.error("카카오 로그인 실패:", error.message);
+          console.error(
+            "!!!!!카카오 로그인 실패:",
+            error.response?.data || error.message
+          );
           // 실패 시 실패 페이지나 메세지 처리
           router.push("/signin");
         }
       };
 
       authenticateWithKakao();
+    } else {
+      console.error("code 파라미터가 없습니다."); // code가 없을 경우 오류 출력
     }
   }, [code, router]);
 

@@ -9,7 +9,10 @@ export const registerKakaoOAuthApp = async (appKey: string) => {
     });
     return response.data;
   } catch (error) {
-    console.error("❌ 간편 로그인 앱 등록 실패:", error);
+    console.error(
+      "❌ 간편 로그인 앱 등록 실패:",
+      error.response?.data || error.message
+    );
     throw error;
   }
 };
