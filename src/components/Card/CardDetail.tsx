@@ -1,25 +1,62 @@
+"use client";
+import { useEffect, useState } from "react";
 import { fetchWineById } from "@/lib/api/wine";
 import Image from "next/image";
 
-// 1. id 값으로 get요청을 하여 와인의 데이터를 받아와 보여준다.
-// 2. 페이지에서 데이터 캐시를 하고 prop으로 데이터를 넘겨주는 방법.
+export default function CardDetail({ id }: { id: string }) {
+  const [wine, setWine] = useState({
+    name: "",
+    price: 0,
+    region: "",
+    image: "",
+  });
 
-export default async function CardDetail({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const { id } = params;
-  const wine = await fetchWineById(id);
-  const { image, name, region, price } = wine;
+  useEffect(() => {
+    const fetchWine = async () => {
+      try {
+        const fetchedWine = await fetchWineById(id);
+        console.log("wine:", fetchedWine);
+        setWine(fetchedWine);
+      } catch (error) {
+        console.error("와인데이터 로딩 실패:", error);
+      }
+    };
+    fetchWine();
+  }, [id]);
+
+  const imageSrc = wine.image.startsWith("http")
+    ? wine.image
+    : "/images/wine/wine1.png";
 
   return (
-    <div className="max-w-1120 w-full">
-      <Image src={image} alt="와인 이미지" width={58} height={230} />
-      <div>
-        <p>{name}</p>
-        <p>{region}</p>
-        <p>{`₩ ${price}`}</p>
+    <div className="flex flex-wrap items-center max-w-[1140px] w-full h-auto sm:h-[260px] border border-[#CFDBEA] rounded-[16px] shadow-md sm:p-4">
+      {/* 와인 이미지 */}
+      <div className="flex-shrink-0 w-[180px] sm:w-[200px] md:w-[220px]">
+        <Image
+          src={imageSrc}
+          alt="와인 이미지"
+          width={220}
+          height={220}
+          className="w-full h-auto"
+        />
+      </div>
+
+      {/* 와인 정보 */}
+      <div className="flex flex-col gap-3 sm:gap-5 ml-6">
+        <p className="text-xl sm:text-2xl md:text-3xl font-semibold">
+          {wine.name}
+        </p>
+        <p className="text-sm sm:text-[14px] md:text-[16px] text-gray-500 font-normal">
+          {wine.region}
+        </p>
+
+        {/* 가격 태그 */}
+        <p
+          style={{ backgroundColor: "#F1EDFC", color: "#6A42DB" }}
+          className="inline-flex items-center justify-center px-3 sm:px-4 py-1 rounded-[12px] text-[16px] sm:text-[18px] font-bold"
+        >
+          {`₩ ${wine.price.toLocaleString("ko-KR")}`}
+        </p>
       </div>
     </div>
   );
