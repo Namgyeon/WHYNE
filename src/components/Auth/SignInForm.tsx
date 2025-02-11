@@ -35,7 +35,12 @@ export default function SignInForm() {
     password: false,
   });
 
-  const router = useRouter(); // useRouter 훅
+  const [isMounted, setIsMounted] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleValidate = async (field: "email" | "password") => {
     const isValid = await trigger(field);
@@ -52,8 +57,9 @@ export default function SignInForm() {
       const response = await signIn(data.email, data.password);
       console.log("로그인 성공:", response);
 
-      // 로그인 성공 후 홈으로 리디렉션
-      router.push("/"); // 홈 화면으로 이동
+      if (isMounted) {
+        router.push("/");
+      }
     } catch (error: any) {
       console.error("로그인 실패:", error.message);
       setError("email", {
@@ -77,8 +83,9 @@ export default function SignInForm() {
           const response = await signInWithKakao(code); // 백엔드에서 카카오 토큰 받아오기
           console.log("카카오 로그인 성공:", response);
 
-          // 로그인 성공 후 홈으로 리디렉션
-          router.push("/"); // 홈 화면으로 이동
+          if (isMounted) {
+            router.push("/");
+          }
         } catch (error) {
           console.error("카카오 로그인 실패:", error);
           // 실패 시 처리
@@ -87,7 +94,11 @@ export default function SignInForm() {
 
       getKakaoToken();
     }
-  }, [window.location.search]); // URL에 변경이 있을 때마다 실행
+  }, [window.location.search, isMounted]); // URL에 변경이 있을 때마다 실행
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <form

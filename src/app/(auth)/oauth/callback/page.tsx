@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation"; // URL 쿼리 파라미터 접근
 import { signInWithKakao } from "@/lib/api/kakaoAuth"; // 카카오 로그인 API 호출 함수
 
-export default function KakaoCallback() {
+export default function KakaoOAuth() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const code = searchParams.get("code"); // URL에서 'code' 파라미터 추출

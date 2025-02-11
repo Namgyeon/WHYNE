@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
@@ -12,8 +12,18 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { signUp } from "@/lib/api/auth";
+import { useAuth } from "@/context/AuthProvider";
 
 export default function SignUpForm() {
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [user, router]);
+
   const {
     register,
     handleSubmit,
@@ -30,8 +40,6 @@ export default function SignUpForm() {
     nickname: false,
     password: false,
   });
-
-  const router = useRouter();
 
   type Field = "email" | "nickname" | "password";
 
