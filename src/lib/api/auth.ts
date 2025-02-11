@@ -24,9 +24,12 @@ export const signUp = async (
         withCredentials: false, // ✅ CORS 문제 방지
       }
     );
-
     console.log("✅ 회원가입 성공:", response.data);
-    return response.data;
+
+    const loginResponse = await signIn(email, password);
+    console.log("✅ 로그인 성공 후 토큰 저장:", loginResponse);
+
+    return loginResponse;
   } catch (error: any) {
     console.error("❌ 회원가입 실패:", error.response?.data || error);
     throw error;
@@ -43,6 +46,7 @@ export const signIn = async (email: string, password: string) => {
     console.log("🛠 로그인 응답 데이터:", response.data);
     console.log("🛠 저장할 accessToken:", accessToken);
 
+    localStorage.setItem("email", email);
     localStorage.setItem("access_token", accessToken);
     localStorage.setItem("refresh_token", refreshToken);
 
