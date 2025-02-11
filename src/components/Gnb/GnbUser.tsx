@@ -5,13 +5,23 @@ import { useAuth } from "@/context/AuthProvider";
 import Link from "next/link";
 import Image from "next/image";
 import Dropdown from "../Dropdown";
+import Skeleton from "./Skeleton";
 
 export default function GnbUser() {
   const { user, isLoading, logout } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
   if (isLoading) {
-    return <div>로딩 중...</div>;
+    return (
+      <div className="flex gap-[20px] md:gap-[40px] relative">
+        {/* 스켈레톤 로딩 */}
+        <Skeleton
+          width="w-[45px]"
+          height="h-[45px]"
+          className="border border-gray-300 rounded-full overflow-hidden"
+        />
+      </div>
+    );
   }
 
   return (
