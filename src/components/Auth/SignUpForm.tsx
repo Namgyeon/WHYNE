@@ -20,6 +20,7 @@ export default function SignUpForm() {
     formState: { errors, isValid },
     trigger,
     setError,
+    setFocus,
   } = useForm<SignUpSchema>({
     mode: "onChange",
     resolver: zodResolver(signUpSchema),
@@ -123,6 +124,12 @@ export default function SignUpForm() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
+            onAnimationComplete={() => {
+              // 애니메이션이 끝난 후에 포커스 이동
+              if (validity.email) {
+                setFocus("nickname");
+              }
+            }}
           >
             <Label htmlFor="nickname">닉네임</Label>
             <Input
@@ -146,6 +153,12 @@ export default function SignUpForm() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
+            onAnimationComplete={() => {
+              // 애니메이션이 끝난 후에 포커스 이동
+              if (validity.nickname) {
+                setFocus("password");
+              }
+            }}
           >
             <Label htmlFor="password">비밀번호</Label>
             <InputPassword
@@ -169,6 +182,12 @@ export default function SignUpForm() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
+            onAnimationComplete={() => {
+              // 애니메이션이 끝난 후에 포커스 이동
+              if (validity.password) {
+                setFocus("passwordConfirmation");
+              }
+            }}
           >
             <Label htmlFor="passwordConfirmation">비밀번호 확인</Label>
             <InputPassword
