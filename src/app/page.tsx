@@ -1,14 +1,13 @@
-import  {GnbLayout}  from "@/components/Gnb";
+import Gnb from "@/components/Gnb";
 import Image from "next/image";
 import Link from "next/link";
-
 
 export default function Home() {
   return (
     <main className="flex flex-col items-center w-full bg-[#F2F4F8]">
       <div className="w-[1140px]">
         <header className="h-[70px] mt-[24px] my-[390px] mb-[80px]">
-          <GnbLayout />
+          <Gnb />
         </header>
 
         {/* 메인 이미지 섹션 */}
@@ -61,7 +60,7 @@ export default function Home() {
           </section>
 
           <span className="w-[279px] h-[50px] bg-[#6A42DB] text-white flex justify-center items-center rounded-[100px] mt-[104px] mx-[820.5px] mb-[109px] cursor-pointer">
-          <Link href="/winelist">와인 보러가기</Link>
+            <Link href="/winelist">와인 보러가기</Link>
           </span>
         </div>
       </div>
