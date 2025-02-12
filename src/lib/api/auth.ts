@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import apiClient from "./api";
 
 // ✅ 회원가입
@@ -30,8 +31,12 @@ export const signUp = async (
     console.log("✅ 로그인 성공 후 토큰 저장:", loginResponse);
 
     return loginResponse;
-  } catch (error: any) {
-    console.error("❌ 회원가입 실패:", error.response?.data || error);
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      console.error("❌ 회원가입 실패:", error.response?.data || error);
+    } else {
+      console.error("❌ 회원가입 실패: 알 수 없는 오류");
+    }
     throw error;
   }
 };
