@@ -15,17 +15,26 @@ import {
 
 import ModalWineAdd from "@/components/Modal/ModalWineAdd/ModalWineAdd";
 import Gnb from "@/components/Gnb";
-import { createWine, fetchWineById, updateWine } from "@/lib/api/wine";
+import { createWine, updateWine } from "@/lib/api/wine";
 import { useRouter } from "next/navigation"; // 라우팅 추가
 import { fetchMyWines } from "@/lib/api/user";
+
+type Wine = {
+  id: number;
+  name: string;
+  price: number;
+  region: string;
+  type: string;
+  image: string;
+};
 
 export default function HyeseonTest() {
   const { user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [userWines, setUserWines] = useState<any[]>([]); // 사용자가 등록한 와인 목록
-  const [wineToEdit, setWineToEdit] = useState<any>(null); // 수정할 와인 데이터
-  const router = useRouter(); // useRouter를 올바르게 선언
+  const [userWines, setUserWines] = useState<Wine[]>([]); // 사용자가 등록한 와인 목록
+  const [wineToEdit, setWineToEdit] = useState<Wine | null>(null); // 수정할 와인 데이터
+  const router = useRouter(); // useRouter를 올바 르게 선언
 
   useEffect(() => {
     if (user) {
@@ -36,7 +45,7 @@ export default function HyeseonTest() {
 
             // 와인 목록에 포함된 image 데이터 확인
             console.log("불러온 와인 목록:", data.list);
-            data.list.forEach((wine: any) => {
+            data.list.forEach((wine: Wine) => {
               console.log("와인 ID:", wine.id);
               console.log("와인 이미지 URL:", wine.image); // imageUrl 확인
             });
@@ -74,12 +83,12 @@ export default function HyeseonTest() {
     }
   }, [isEditMode, wineToEdit]);
 
-  const handleWineSubmit = async (data: any) => {
+  const handleWineSubmit = async (data: Wine) => {
     try {
       console.log("전송되는 데이터:", JSON.stringify(data, null, 2));
 
       if (isEditMode && wineToEdit?.id) {
-        const { id, ...validData } = data; // ID 제거 후 요청
+        const { ...validData } = data; // ID 제거 후 요청
         console.log("수정할 와인 ID:", wineToEdit.id);
         console.log("PATCH 요청 바디:", validData);
         await updateWine(wineToEdit.id, validData);
@@ -92,15 +101,14 @@ export default function HyeseonTest() {
       setIsModalOpen(false);
       setWineToEdit(null);
       router.push("/");
-    } catch (error: any) {
-      console.error(
-        "❌ 와인 처리 중 오류:",
-        error.response?.data || error.message
-      );
-      alert(
-        "와인 처리 중 오류가 발생했습니다. 상세 오류: " +
-          (error.response?.data?.message || error.message)
-      );
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("❌ 와인 처리 중 오류:", error.message);
+        alert("와인 처리 중 오류가 발생했습니다. 상세 오류: " + error.message);
+      } else {
+        console.error("❌ 알 수 없는 오류가 발생했습니다:", error);
+        alert("알 수 없는 오류가 발생했습니다.");
+      }
     }
   };
 
