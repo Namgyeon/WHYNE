@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation"; // URL 쿼리 파라미터 접근
 import { signInWithKakao } from "@/lib/api/kakaoAuth"; // 카카오 로그인 API 호출 함수
+import { AxiosError } from "axios";
 
 export default function KakaoCallback() {
   const router = useRouter();
@@ -23,12 +24,17 @@ export default function KakaoCallback() {
           // 로그인 성공 후 홈 화면으로 리디렉션
           router.push("/");
         } catch (error) {
-          console.error(
-            "!!!!!카카오 로그인 실패:",
-            error.response?.data || error.message
-          );
-          // 실패 시 실패 페이지나 메세지 처리
-          router.push("/signin");
+          if (error instanceof AxiosError) {
+            console.error(
+              "!!!!!카카오 로그인 실패:",
+              error.response?.data || error.message
+            );
+            // 실패 시 실패 페이지나 메세지 처리
+            router.push("/signin");
+          } else {
+            console.error("알 수 없는 오류 발생:", error);
+            router.push("/signin");
+          }
         }
       };
 
