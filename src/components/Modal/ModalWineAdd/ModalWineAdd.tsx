@@ -10,6 +10,7 @@ type WineData = {
   region: string;
   type: string;
   image: string;
+  avgRating?: number; // avgRating을 optional로 추가
 };
 
 type ModalWindAddProps = {
@@ -73,15 +74,15 @@ export default function ModalWineAdd({
         <ModalWineAddForm
           onSubmit={handleWineSubmit}
           onClose={onClose}
-          initialData={
-            wineToEdit || {
-              name: "",
-              price: 0,
-              region: "",
-              type: "",
-              image: "",
-            }
-          }
+          initialData={{
+            name: wineToEdit?.name ?? "",
+            price: wineToEdit?.price ?? 0,
+            region: wineToEdit?.region ?? "",
+            type: wineToEdit?.type ?? "",
+            image: wineToEdit?.image ?? "",
+            avgRating: wineToEdit?.avgRating ?? 0, // 기본값 설정
+            id: wineToEdit?.id ?? undefined, // id도 기본값을 설정
+          }}
           isEditMode={isEditMode}
         />
       </div>
