@@ -13,6 +13,7 @@ import Image from "next/image";
 
 import { signUp } from "@/lib/api/auth";
 import { useAuth } from "@/context/AuthProvider";
+import { AxiosError } from "axios";
 
 export default function SignUpForm() {
   const { user } = useAuth();
@@ -65,7 +66,7 @@ export default function SignUpForm() {
       console.log("회원가입 성공:", response);
       router.push("/");
     } catch (error) {
-      if (error instanceof Error) {
+      if (error instanceof AxiosError) {
         console.error("회원가입 실패:", error.message);
         const errorMessage =
           error.response?.data?.message || error.response?.data?.error;
