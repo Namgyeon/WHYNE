@@ -18,8 +18,6 @@ export default function InputSelect({
   selectedValue,
   onChange,
   className = "",
-  children,
-  id,
 }: InputSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentValue, setCurrentValue] = useState<string | undefined>(
