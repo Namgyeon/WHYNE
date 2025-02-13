@@ -18,6 +18,7 @@ const ProfileSetting: React.FC<ProfileSettingProps> = ({
 }) => {
   const [newNickname, setNewNickname] = useState<string>(nickname);
   const [newImage, setNewImage] = useState<string>(image);
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
   // UseEffect를 사용하여 nickname과 image가 변경될 때 상태를 업데이트
   useEffect(() => {
@@ -34,6 +35,9 @@ const ProfileSetting: React.FC<ProfileSettingProps> = ({
   };
 
   const handleUpdate = async () => {
+    console.log("💡 업데이트 요청 데이터:", { newNickname, newImage });
+
+    setIsUpdating(true);
     try {
       const updatedUser = await updateUserProfile(newNickname, newImage);
       setUser(updatedUser);
@@ -43,6 +47,8 @@ const ProfileSetting: React.FC<ProfileSettingProps> = ({
         console.error("❌ 프로필 업데이트 실패:", error);
         alert("프로필 업데이트 중 오류가 발생했습니다.");
       }
+    } finally {
+      setIsUpdating(false); // 로딩 상태 해제
     }
   };
 
@@ -63,14 +69,19 @@ const ProfileSetting: React.FC<ProfileSettingProps> = ({
           <h2 className="text-md-14px-medium md:text-lg-16px-medium lg:text-lg-16px-medium text-gray-800">
             닉네임
           </h2>
-          <Input value={newNickname} onChange={handleNicknameChange} />
+          <Input
+            value={newNickname}
+            onChange={handleNicknameChange}
+            disabled={isUpdating}
+          />
         </div>
         <Button
           variant="button"
           className="h-[42px] md:h-[48px] lg:h-[42px] text-md-14px-bold md:text-lg-16px-bold lg:text-lg-16px-bold"
           onClick={handleUpdate}
+          disabled={isUpdating}
         >
-          변경하기
+          {isUpdating ? "변경 중..." : "변경하기"}
         </Button>
       </div>
     </>
