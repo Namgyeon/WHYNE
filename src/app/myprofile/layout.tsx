@@ -8,7 +8,9 @@ export default function MyProfileLayout({
   return (
     <main className="flex flex-col gap-[20px] md:gap-[17px] lg:gap-[37px] w-full lg:w-[1140px] px-[16px] md:px-[20px] lg:px-0 mx-auto my-[20px] md:my-[30px] lg:my-[40px]">
       <Gnb />
-      <section className="flex">{children}</section>
+      <section className="flex flex-col lg:flex-row justify-stretch gap-[8%] md:gap-[5%]">
+        {children}
+      </section>
     </main>
   );
 }
