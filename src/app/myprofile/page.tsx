@@ -33,7 +33,7 @@ export default function MyProfile() {
         }
       );
     }
-  }, [user, isLoading]);
+  }, [user, isLoading, router]);
 
   if (isLoading) {
     return <div>Loading...</div>;
