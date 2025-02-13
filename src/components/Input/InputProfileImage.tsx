@@ -4,14 +4,22 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Icon from "@/components/Icon/Icon";
 
-export default function InputProfileImage() {
+interface InputProfileImageProps {
+  currentImage: string;
+  onImageChange: (file: File, previewUrl: string) => void;
+}
+
+export default function InputProfileImage({
+  currentImage,
+  onImageChange,
+}: InputProfileImageProps) {
   const imageRef = useRef<HTMLInputElement | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isHover, setIsHover] = useState(false);
 
   useEffect(() => {
-    setImagePreview("/images/common/no_profile.svg");
-  }, []);
+    setImagePreview(currentImage || "/images/common/no_profile.svg");
+  }, [currentImage]);
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -35,6 +43,7 @@ export default function InputProfileImage() {
 
     const previewUrl = URL.createObjectURL(file);
     setImagePreview(previewUrl);
+    onImageChange(file, previewUrl);
   };
 
   return (
