@@ -45,7 +45,6 @@ export default function Page() {
         <CardDetail id={wineId} />
       </div>
       {/* 리뷰가 1개라도 있어야 데이터 보여줌. */}
-
       {reviewsId.length > 0 ? (
         <div className="flex flex-col gap-[60px] justify-between lg:flex-row">
           <div className="flex-1 w-full order-last lg:order-first">
