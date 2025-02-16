@@ -1,4 +1,5 @@
 "use client";
+import MoreMenu from "@/components/Moremenu/MoreMenu";
 import Image from "next/image";
 
 type WineData = {
@@ -6,6 +7,8 @@ type WineData = {
   price: number;
   region: string;
   image: string;
+  reviewId: number;
+  userId: number;
 };
 
 export default function MyList({ wine }: { wine: WineData }) {
@@ -15,8 +18,9 @@ export default function MyList({ wine }: { wine: WineData }) {
       : "/images/wine/wine2.png";
 
   return (
-    <div className="flex flex-wrap items-center max-w-[1140px] w-full h-auto sm:h-[260px] border border-[#CFDBEA] rounded-[16px] shadow-md sm:p-4">
+    <div className="relative flex flex-wrap items-center max-w-[1140px] w-full h-auto sm:h-[260px] border border-[#CFDBEA] rounded-[16px] shadow-md sm:p-4">
       {/* 와인 이미지 */}
+
       <div className="relative flex-shrink-0 w-[180px] sm:w-[200px] md:w-[220px]">
         {
           <Image
@@ -28,7 +32,9 @@ export default function MyList({ wine }: { wine: WineData }) {
           />
         }
       </div>
-
+      <div className="absolute md:top-[30px] md:right-[40px] sm:top-[20px] sm:right-[20px]">
+        <MoreMenu reviewId={wine.reviewId} userId={wine.userId} />
+      </div>
       {/* 와인 정보 */}
       <div className="flex flex-col gap-3 sm:gap-5 ml-6">
         <p className="text-xl sm:text-2xl md:text-3xl font-semibold">
