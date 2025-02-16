@@ -36,7 +36,7 @@ export default function ModalReviewAdd({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 ">
+    <div className="z-50 fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 ">
       <div className="flex flex-col gap-10 w-full max-w-[528px]  p-6 rounded-lg bg-white shadow-lg ">
         <ModalReviewForm
           onClose={onClose}
