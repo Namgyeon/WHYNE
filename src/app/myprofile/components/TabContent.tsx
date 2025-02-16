@@ -1,5 +1,7 @@
 "use client";
 
+import MyList from "@/components/Card/Mylist/MyList";
+
 interface TabContentProps {
   activeTab: number;
 }
@@ -14,6 +16,7 @@ export default function TabContent({ activeTab }: TabContentProps) {
       ) : activeTab === 2 ? (
         <div>
           <h2>내가 등록한 와인</h2>
+          <MyList />
         </div>
       ) : null}
     </div>
