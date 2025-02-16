@@ -1,49 +1,32 @@
 "use client";
-import { useEffect, useState } from "react";
 import Image from "next/image";
-import { fetchMyWines } from "@/lib/api/user";
 
-type MyListProps = {
-  limit: number;
-  cursor?: string;
+type WineData = {
+  name: string;
+  price: number;
+  region: string;
+  image: string;
 };
 
-export default function MyList({ limit, cursor }: MyListProps) {
-  const [wine, setWine] = useState({
-    name: "",
-    price: 0,
-    region: "",
-    image: "",
-  });
-
-  useEffect(() => {
-    const fetchWine = async () => {
-      try {
-        const fetchedWine = await fetchMyWines(limit, cursor);
-        console.log("wine:", fetchedWine);
-        setWine(fetchedWine);
-      } catch (error) {
-        console.error("와인데이터 로딩 실패:", error);
-      }
-    };
-    fetchWine();
-  }, [id]);
-
-  const imageSrc = wine.image.startsWith("http")
-    ? wine.image
-    : "/images/wine/wine1.png";
+export default function MyList({ wine }: { wine: WineData }) {
+  const imageSrc =
+    wine.image && wine.image.startsWith("http")
+      ? wine.image
+      : "/images/wine/wine2.png";
 
   return (
     <div className="flex flex-wrap items-center max-w-[1140px] w-full h-auto sm:h-[260px] border border-[#CFDBEA] rounded-[16px] shadow-md sm:p-4">
       {/* 와인 이미지 */}
-      <div className="flex-shrink-0 w-[180px] sm:w-[200px] md:w-[220px]">
-        <Image
-          src={imageSrc}
-          alt="와인 이미지"
-          width={220}
-          height={220}
-          className="w-full h-auto"
-        />
+      <div className="relative flex-shrink-0 w-[180px] sm:w-[200px] md:w-[220px]">
+        {
+          <Image
+            src={imageSrc}
+            alt="와인 이미지"
+            width={60}
+            height={60}
+            className="object-cover rounded-lg mx-auto"
+          />
+        }
       </div>
 
       {/* 와인 정보 */}
