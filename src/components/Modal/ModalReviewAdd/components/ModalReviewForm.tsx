@@ -95,37 +95,38 @@ export default function ModalReviewForm({
     }
   }, [initialWineId, paramWineId]);
 
-  // 기존 리뷰 데이터를 가져오는 함수
-  const fetchReviewData = async (reviewId: number) => {
-    if (!reviewId || !isEditMode) return;
-    try {
-      const response = await fetchReviewById(reviewId);
-      console.log("기존리뷰 데이터 가져오기:", response);
+  const fetchReviewData = useCallback(
+    async (reviewId: number) => {
+      if (!reviewId || !isEditMode) return;
+      try {
+        const response = await fetchReviewById(reviewId);
+        console.log("기존리뷰 데이터 가져오기:", response);
 
-      setValues((prev) => ({
-        ...prev,
-        rating: response.rating,
-        content: response.content,
-        lightBold: response.lightBold,
-        smoothTannic: response.smoothTannic,
-        drySweet: response.drySweet,
-        softAcidic: response.softAcidic,
-        aroma: response.aroma,
-        wineId: response.wineId ?? prev.wineId, // ✅ 기존 wineId 유지
-      }));
-      // ✅ `initialWineId`가 없을 때만 `setWineId` 실행
-      if (!initialWineId) {
-        setWineId(response.wineId);
-      }
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        console.error(
-          "수정하기 위해 기존 리뷰데이터 불러오기 실패:",
-          error.response?.data
-        );
+        setValues((prev) => ({
+          ...prev,
+          rating: response.rating,
+          content: response.content,
+          lightBold: response.lightBold,
+          smoothTannic: response.smoothTannic,
+          drySweet: response.drySweet,
+          softAcidic: response.softAcidic,
+          aroma: response.aroma,
+          wineId: response.wineId ?? prev.wineId, // ✅ 기존 wineId 유지
+        }));
+
+        if (!initialWineId) {
+          setWineId(response.wineId);
+        }
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          console.error(
+            "수정하기 위해 기존 리뷰데이터 불러오기 실패:",
+            error.response?.data
+          );
+        }
       }
     },
-    [isEditMode]
+    [isEditMode, initialWineId]
   );
 
   // ✅ `reviewId`가 변경될 때 기존 리뷰 데이터를 가져옴
