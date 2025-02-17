@@ -4,11 +4,12 @@ import ModalReviewFlavor from "./ModalReviewFlavor";
 import ModalReviewRate from "./ModalReviewRate";
 import ModalReviewSmell from "./ModalReviewSmell";
 import ModalReviewHeader from "./ModalReviewHeader";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { fetchWineById } from "@/lib/api/wine";
 import { createReview, fetchReviewById, updateReview } from "@/lib/api/review";
 import { AxiosError } from "axios";
+import { showToast } from "@/components/Toast/Toast";
 
 // 1.와인 리뷰에 필요한 값들을 상태값으로 정리.
 // 2.(rating,content)값은 ModalReviewRate컴포넌트 / (lightBold, smoothTannic, drySweet, softAcidic)값은 ModalReviewFlavor 컴포넌트 / (aroma[])값은 ModalReviewSmell 컴포넌트
@@ -79,31 +80,34 @@ export default function ModalReviewForm({
   const disabled = !(values.rating && values.content);
 
   // 기존 리뷰 데이터를 가져오는 함수
-  const fetchReviewData = async (reviewId: number) => {
-    if (!reviewId || !isEditMode) return;
-    try {
-      const response = await fetchReviewById(reviewId);
-      console.log("기존리뷰 데이터 가져오기:", response);
+  const fetchReviewData = useCallback(
+    async (reviewId: number) => {
+      if (!reviewId || !isEditMode) return;
+      try {
+        const response = await fetchReviewById(reviewId);
+        console.log("기존리뷰 데이터 가져오기:", response);
 
-      setValues({
-        rating: response.rating,
-        content: response.content,
-        lightBold: response.lightBold,
-        smoothTannic: response.smoothTannic,
-        drySweet: response.drySweet,
-        softAcidic: response.softAcidic,
-        aroma: response.aroma,
-        wineId: response.wineId,
-      });
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        console.error(
-          "수정하기 위해 기존 리뷰데이터 불러오기 실패:",
-          error.response?.data
-        );
+        setValues({
+          rating: response.rating,
+          content: response.content,
+          lightBold: response.lightBold,
+          smoothTannic: response.smoothTannic,
+          drySweet: response.drySweet,
+          softAcidic: response.softAcidic,
+          aroma: response.aroma,
+          wineId: response.wineId,
+        });
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          console.error(
+            "수정하기 위해 기존 리뷰데이터 불러오기 실패:",
+            error.response?.data
+          );
+        }
       }
-    }
-  };
+    },
+    [isEditMode]
+  );
 
   useEffect(() => {
     const fetchWine = async () => {
@@ -123,7 +127,7 @@ export default function ModalReviewForm({
     if (reviewId && isEditMode) {
       fetchReviewData(reviewId);
     }
-  }, [reviewId, isEditMode]);
+  }, [reviewId, isEditMode, fetchReviewData]);
 
   useEffect(() => {
     if (initialReviewId) {
@@ -156,26 +160,19 @@ export default function ModalReviewForm({
       if (isEditMode) {
         // 수정 요청 PATCH
         response = await updateReview(reviewId!, reviewData);
-        console.log("리뷰 수정완료", response);
-        alert("리뷰가 수정되었습니다.");
+        showToast("리뷰가 수정되었습니다.", "success");
       }
       if (!isEditMode && reviewData.wineId !== undefined) {
         response = await createReview({
           ...reviewData,
           wineId: reviewData.wineId,
         });
-        console.log("리뷰등록 완료", response);
-        alert("리뷰가 성공적으로 등록되었습니다.");
+        showToast("리뷰가 성공적으로 등록되었습니다.", "success");
       }
       onClose();
-      // 리뷰 등록후 재렌더링
-      console.log(response.id);
       onSuccess(response.id);
     } catch (error) {
       console.error("리뷰 등록 실패:", error);
-      if (error instanceof AxiosError) {
-        console.error("리뷰 수정 실패:", error.response?.data);
-      }
     }
   };
 
