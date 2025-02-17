@@ -99,7 +99,7 @@ export default function ModalWineAddForm({
       await onSubmit(wineData);
 
       // 성공적으로 저장되면 상세 페이지로 리디렉션 (POST 요청이 완료되면 상세 페이지로 이동)
-      router.push("/");
+      //router.push("/");
       onClose();
     } catch (error) {
       console.error("와인 정보 저장 실패", error);
