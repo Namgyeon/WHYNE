@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Button from "@/components/Button/button";
 import { Input, InputFile, InputSelect, Label } from "@/components/Input";
 import { uploadImage } from "@/lib/api/image";
-import { useRouter } from "next/navigation";
 
 type ModalWineFormProps = {
   initialData?: {
@@ -44,7 +43,6 @@ export default function ModalWineAddForm({
   // 수정된 부분
   const [formData, setFormData] = useState(initialData);
   const [file, setFile] = useState<File | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     if (isEditMode && initialData.image) {
