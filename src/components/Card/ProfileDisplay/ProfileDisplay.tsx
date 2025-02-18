@@ -60,8 +60,8 @@ const ProfileDisplay: React.FC<ProfileDisplayProps> = ({
       <Image
         src={profileImage}
         alt="Profile"
-        width={20}
-        height={20}
+        width={40}
+        height={40}
         className="w-10 h-10 rounded-full"
       />
       <div className="flex flex-col">
