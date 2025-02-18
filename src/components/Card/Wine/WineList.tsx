@@ -232,7 +232,7 @@ export default function WineList() {
               alt="모달 버튼"
               width={48}
               height={48}
-              className="w-[48px] h-[48px] object-cover" // 이미지 크기 조정
+              className=" w-[38px] h-[38px] sm:w-[48px] sm:h-[48px] object-cover" // 이미지 크기 조정
               priority
               unoptimized
             />
