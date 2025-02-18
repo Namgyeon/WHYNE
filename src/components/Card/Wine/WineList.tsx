@@ -118,25 +118,6 @@ export default function WineList() {
       return;
     }
 
-<<<<<<< HEAD
-    const formattedWineData = {
-      name: wineData.name,
-      region: wineData.region,
-      image: wineData.image,
-      price: wineData.price,
-      type: wineData.type,
-    };
-
-    try {
-      console.log(
-        "📤 API 요청 데이터:",
-        JSON.stringify(formattedWineData, null, 2)
-      );
-
-      const createdWine = await createWine(formattedWineData);
-      showToast("🍷 새로운 와인이 등록되었습니다.", "success");
-
-=======
     try {
       // ✅ 불필요한 id, avgRating 제거
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -146,7 +127,6 @@ export default function WineList() {
       console.log("📤 API 요청 데이터:", wineData);
       const createdWine = await createWine(validWineData);
       alert("🍷 새로운 와인이 등록되었습니다.");
->>>>>>> ee58dff24132e8fc9151deee7358533f7946533c
       setWines((prevWines) => [
         {
           ...createdWine,
