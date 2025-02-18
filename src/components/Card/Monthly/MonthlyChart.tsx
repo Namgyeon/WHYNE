@@ -55,14 +55,14 @@ export default function MonthlyChart() {
   // ✅ 좌우 스크롤 이동
   const scrollLeft = () => {
     if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: -300, behavior: "smooth" });
+      scrollRef.current.scrollBy({ left: -255, behavior: "smooth" });
       setTimeout(updateScrollButtons, 300); // ✅ 애니메이션 후 버튼 상태 업데이트
     }
   };
 
   const scrollRight = () => {
     if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
+      scrollRef.current.scrollBy({ left: 255, behavior: "smooth" });
       setTimeout(updateScrollButtons, 300); // ✅ 애니메이션 후 버튼 상태 업데이트
     }
   };
@@ -93,7 +93,7 @@ export default function MonthlyChart() {
       {canScrollLeft && (
         <button
           onClick={scrollLeft}
-          className="absolute left-[20px] top-[130px] w-[70px] h-[70px] p-0 z-10 flex items-center justify-center border-none bg-transparent"
+          className="absolute left-[3%] top-1/2 w-[70px] h-[70px] p-0 z-10 flex items-center justify-center border-none bg-transparent"
         >
           <Image
             src="/images/common/Frame left.png"
@@ -111,7 +111,7 @@ export default function MonthlyChart() {
       {canScrollRight && (
         <button
           onClick={scrollRight}
-          className="absolute left-[1010px] top-[130px] w-[70px] h-[70px] p-0 z-10 flex items-center justify-center border-none bg-transparent"
+          className="absolute left-[70%] sm:left-[88%] md:left-[90%] top-1/2 w-[70px] h-[70px] p-0 z-10 flex items-center justify-center border-none bg-transparent"
         >
           <Image
             src="/images/common/Frame 68.png"

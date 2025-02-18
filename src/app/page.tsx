@@ -9,7 +9,7 @@ export default function Home() {
 
   return (
     <main className="flex flex-col items-center w-full bg-[#F2F4F8]">
-      <div className="w-full max-w-[1140px] px-4 sm:max-w-full">
+      <div className="w-full w-[375px] md:w-[704px] lg:w-[1140px] px-4">
         {/* ✅ 네비게이션 바 */}
         <header className="h-[70px] mt-[24px] mb-[40px] md:mb-[80px]">
           <Gnb />
@@ -29,8 +29,8 @@ export default function Home() {
         </section>
 
         <div className="flex flex-col items-center mt-[80px] md:mt-[160px]">
-          {/* ✅ 모바일에서는 1개씩, 큰 화면에서는 2개씩 표시 */}
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-x-6 md:gap-y-12 w-full">
+          {/* ✅ 항상 한 줄씩 표시 */}
+          <section className="grid grid-cols-1 gap-6 w-full md:w-[699px]">
             <div className="w-full flex justify-center">
               <Image
                 src="/images/home/lg_02.png"
@@ -53,8 +53,7 @@ export default function Home() {
               />
             </div>
 
-            {/* ✅ 리뷰 시스템 (모바일에서는 한 줄, 데스크탑에서는 2줄) */}
-            <div className="w-full flex justify-center md:col-span-2">
+            <div className="w-full flex justify-center">
               <Image
                 src="/images/home/lg_04.png"
                 alt="리뷰 시스템"

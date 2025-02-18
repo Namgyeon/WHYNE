@@ -1,4 +1,5 @@
 import Gnb from "@/components/Gnb";
+import { Toaster } from "sonner"; // ⬅️ 추가
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -7,6 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Gnb />
       </div>
       <section>{children}</section>
+      <Toaster />
     </div>
   );
 }

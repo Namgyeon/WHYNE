@@ -1,6 +1,6 @@
 //import HoyoungTest from "./HoyoungTest";
 import HyeseonTest from "./HyeseonTest";
-import KyungsuTest from "./KyungsuTest";
+// import KyungsuTest from "./KyungsuTest";
 import GiyeonTest from "./GiyeonTest";
 import YuseopTest from "./YuseopTest";
 import { AuthProvider } from "@/context/AuthProvider";
@@ -29,13 +29,13 @@ export default function TestPage() {
           <HyeseonTest />
         </section>
 
-        {/* ✅ 경수 테스트 영역 */}
+        {/* ✅ 경수 테스트 영역
         <section className="p-6 border border-gray-300 rounded-lg">
           <h2 className="text-lg font-semibold text-green-600">
             🟩 경수 테스트
           </h2>
           <KyungsuTest />
-        </section>
+        </section> */}
 
         {/* ✅ 기연 테스트 영역 */}
         <section className="p-6 border border-gray-300 rounded-lg">

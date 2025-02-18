@@ -2,13 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { fetchWines, createWine } from "@/lib/api/wine";
-import { useAuth } from "@/context/AuthProvider"; // ✅ 로그인 정보 사용
+import { useAuth } from "@/context/AuthProvider";
 import WineCard from "./WineCard";
 import WineTypeSelector from "@/components/filter/WineTypeSelector";
 import PriceSlider from "@/components/filter/PriceSlider";
 import RatingFilter from "@/components/filter/RatingFilter";
 import ModalWineAdd from "@/components/Modal/ModalWineAdd/ModalWineAdd";
 import Icon from "@/components/Icon/Icon";
+import { showToast } from "@/components/Toast/Toast";
+import ModalFilter from "@/components/Modal/ModalFilter/ModalFilter";
+import Image from "next/image";
+import { useSwipeable } from "react-swipeable";
 
 type Wine = {
   id: number;
@@ -26,7 +30,6 @@ export default function WineList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // ✅ 필터 상태
   const [selectedType, setSelectedType] = useState<
     "RED" | "WHITE" | "SPARKLING" | "ALL"
   >("ALL");
@@ -38,55 +41,69 @@ export default function WineList() {
     "추천순" | "많은 리뷰" | "높은 가격순" | "낮은 가격순"
   >("추천순");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  const { user } = useAuth(); // ✅ 사용자 로그인 정보 가져오기
+  const { user } = useAuth();
 
-  // ✅ 와인 목록 가져오기
-  // ✅ 와인 목록 가져오기
   useEffect(() => {
-    async function getWines() {
-      setLoading(true);
-      try {
-        const response = await fetchWines({
-          limit: 1000,
-          type: selectedType === "ALL" ? undefined : selectedType,
-          minPrice,
-          maxPrice,
-          rating:
-            selectedRating !== "all"
-              ? parseFloat(selectedRating.split("-")[0])
-              : undefined,
-        });
-
-        const [minRating, maxRating] =
-          selectedRating !== "all"
-            ? selectedRating.split("-").map(parseFloat)
-            : [0, 5];
-
-        console.log("🎯 선택한 평점 필터:", { minRating, maxRating });
-
-        const filtered = response.list.filter((wine: Wine) => {
-          const avgRating = wine.avgRating ?? 0; // ✅ 기본값 0 처리
-          const roundedRating = Math.floor(avgRating * 10) / 10; // ✅ 소수점 1자리까지만 비교
-          console.log(
-            `📊 비교: ${wine.name} | avgRating: ${roundedRating}, min: ${minRating}, max: ${maxRating}`
-          );
-
-          return roundedRating >= minRating && roundedRating <= maxRating;
-        });
-
-        setWines(filtered);
-      } catch (error) {
-        console.error("⚠️ 와인 목록을 불러오지 못했습니다.", error);
-        setError("와인 목록을 가져올 수 없습니다.");
-      } finally {
-        setLoading(false);
-      }
+    if (isFilterOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
     }
-    getWines();
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isFilterOpen]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // ✅ 와인 목록 불러오기 (새로운 방식)
+  const loadWines = async () => {
+    setLoading(true);
+    try {
+      const response = await fetchWines({
+        limit: 1000,
+        type: selectedType === "ALL" ? undefined : selectedType,
+        minPrice,
+        maxPrice,
+      });
+
+      const [minRating, maxRating] =
+        selectedRating !== "all"
+          ? selectedRating.split("-").map((r) => parseFloat(r.trim()))
+          : [0, 5];
+
+      console.log("🎯 선택한 평점 필터:", { minRating, maxRating });
+
+      const filtered = response.list.filter((wine: Wine) => {
+        const avgRating = wine.avgRating ?? 0;
+        const roundedRating = Math.round(avgRating * 10) / 10;
+        return roundedRating >= minRating && roundedRating <= maxRating;
+      });
+
+      setWines(filtered);
+    } catch (error) {
+      console.error("⚠️ 와인 목록을 불러오지 못했습니다.", error);
+      setError("와인 목록을 가져올 수 없습니다.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadWines();
   }, [selectedType, minPrice, maxPrice, selectedRating]);
 
-  // ✅ 와인 추가 (모달에서 등록)
+  // ✅ 와인 추가 후 리스트 업데이트
   const handleAddWine = async (wineData: {
     name: string;
     region: string;
@@ -95,15 +112,27 @@ export default function WineList() {
     type: "RED" | "WHITE" | "SPARKLING";
   }) => {
     if (!user) {
-      alert("로그인이 필요합니다.");
+      showToast("로그인이 필요합니다.", "error");
       return;
     }
 
-    try {
-      console.log("📤 API 요청 데이터:", wineData);
-      const createdWine = await createWine(wineData);
+    const formattedWineData = {
+      name: wineData.name,
+      region: wineData.region,
+      image: wineData.image,
+      price: wineData.price,
+      type: wineData.type,
+    };
 
-      alert("🍷 새로운 와인이 등록되었습니다.");
+    try {
+      console.log(
+        "📤 API 요청 데이터:",
+        JSON.stringify(formattedWineData, null, 2)
+      );
+
+      const createdWine = await createWine(formattedWineData);
+      showToast("🍷 새로운 와인이 등록되었습니다.", "success");
+
       setWines((prevWines) => [
         {
           ...createdWine,
@@ -112,40 +141,23 @@ export default function WineList() {
         },
         ...prevWines,
       ]);
+
       setIsModalOpen(false);
-    } catch (error) {
-      console.error("❌ 와인 생성 중 오류 발생:", error);
-      alert("❌ 와인 등록 실패. 다시 시도해 주세요.");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("❌ 와인 생성 중 오류 발생:", error);
+        showToast(`❌ 와인 등록 실패: ${error.message}`, "error");
+      } else {
+        console.error("❌ 알 수 없는 오류 발생", error);
+        showToast("❌ 알 수 없는 오류가 발생했습니다.", "error");
+      }
     }
   };
 
-  const filteredWines = wines.filter((wine) => {
-    const matchesSearch = wine.name
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
-
-    let matchesRating = true;
-    if (selectedRating !== "all") {
-      const [minRating, maxRating] = selectedRating
-        .split("-")
-        .map((r) => parseFloat(r.trim())); // ✅ `parseFloat()` 적용
-      const wineRating =
-        wine.avgRating !== null && wine.avgRating !== undefined
-          ? parseFloat(wine.avgRating.toFixed(1))
-          : null;
-
-      console.log(
-        `📊 필터링 비교: ${wine.name} | avgRating: ${wineRating}, min: ${minRating}, max: ${maxRating}`
-      );
-
-      matchesRating =
-        wineRating !== null &&
-        wineRating >= minRating &&
-        wineRating <= maxRating; // ✅ `<=` 수정
-    }
-
-    return matchesSearch && matchesRating;
-  });
+  // ✅ 검색 필터 적용
+  const filteredWines = wines.filter((wine) =>
+    wine.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   // ✅ 정렬 기능 적용
   const sortedWines = [...filteredWines].sort((a, b) => {
@@ -162,38 +174,47 @@ export default function WineList() {
     }
   });
 
+  const handlers = useSwipeable({
+    onSwipedLeft: () => setIsFilterOpen(false),
+    onSwipedRight: () => setIsFilterOpen(false),
+    trackMouse: true,
+  });
+
   return (
-    <div className="flex gap-10 p-8">
+    <div className="flex flex-col md:flex-row gap-10 md:p-4 md:p-8">
       {/* ✅ 왼쪽 필터 영역 */}
-      <div className="w-[260px] flex flex-col gap-6 mt-[130px]">
-        <WineTypeSelector
-          selectedType={selectedType}
-          setSelectedType={setSelectedType}
-        />
-        <PriceSlider
-          minPrice={minPrice}
-          maxPrice={maxPrice}
-          setMinPrice={setMinPrice}
-          setMaxPrice={setMaxPrice}
-        />
-        <RatingFilter
-          selectedRating={selectedRating}
-          setSelectedRating={setSelectedRating}
-        />
-        {/* ✅ 로그인한 경우에만 버튼 표시 */}
-        {user && (
-          <button
-            className="px-4 py-2 bg-[#6A42DB] text-white rounded-lg"
-            onClick={() => setIsModalOpen(true)}
-          >
-            와인 등록하기
-          </button>
-        )}
-      </div>
+      {!isMobile && (
+        <div className="w-[260px] flex flex-col gap-6 mt-[130px]">
+          <WineTypeSelector
+            selectedType={selectedType}
+            setSelectedType={setSelectedType}
+          />
+          <PriceSlider
+            minPrice={minPrice}
+            maxPrice={maxPrice}
+            setMinPrice={setMinPrice}
+            setMaxPrice={setMaxPrice}
+          />
+          <RatingFilter
+            selectedRating={selectedRating}
+            setSelectedRating={setSelectedRating}
+          />
+
+          {/* ✅ 로그인한 경우에만 버튼 표시 */}
+          {user && (
+            <button
+              className="px-4 py-2 bg-[#6A42DB] text-white rounded-lg"
+              onClick={() => setIsModalOpen(true)}
+            >
+              와인 등록하기
+            </button>
+          )}
+        </div>
+      )}
 
       {/* ✅ 검색창 & 정렬 옵션 */}
-      <div className="flex-1 flex flex-col gap-6">
-        <div className="relative w-[800px]">
+      <div className="md:flex-1 flex flex-col gap-6">
+        <div className="relative w-[343px] sm:w-[600px] xl:w-[800px]">
           <Icon
             name="search"
             size={24}
@@ -204,12 +225,48 @@ export default function WineList() {
             placeholder="와인을 검색해 보세요"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-12 pl-12 pr-4 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#6A42DB]"
+            className="w-full h-12 pl-12 pr-4 rounded-full border border-gray-300 focus:outline-none focus:ring-2"
           />
         </div>
 
+        {isMobile && (
+          <button
+            className="ml-3 md:p-2 w-fit text-white rounded-lg flex items-center justify-center"
+            onClick={() => setIsFilterOpen(true)}
+          >
+            <Image
+              src="/images/common/Group 107.png"
+              alt="모달 버튼"
+              width={48}
+              height={48}
+              className="w-[48px] h-[48px] object-cover" // 이미지 크기 조정
+              priority
+              unoptimized
+            />
+          </button>
+        )}
+        {isFilterOpen && (
+          <div
+            {...handlers}
+            className="fixed inset-0 bg-white flex flex-col md:hidden z-50 w-full h-full overflow-y-auto"
+          >
+            <ModalFilter
+              isOpen={isFilterOpen}
+              setIsOpen={setIsFilterOpen}
+              selectedType={selectedType}
+              setSelectedType={setSelectedType}
+              minPrice={minPrice}
+              setMinPrice={setMinPrice}
+              maxPrice={maxPrice}
+              setMaxPrice={setMaxPrice}
+              selectedRating={selectedRating}
+              setSelectedRating={setSelectedRating}
+            />
+          </div>
+        )}
+
         {/* ✅ 정렬 필터 */}
-        <div className="flex space-x-6 text-gray-500 text-lg justify-end">
+        <div className="flex space-x-6 text-gray-500 text-sm md:text-lg justify-end">
           {["많은 리뷰", "높은 가격순", "낮은 가격순", "추천순"].map(
             (option) => (
               <button
@@ -230,15 +287,7 @@ export default function WineList() {
           ) : error ? (
             <div className="text-red-500">{error}</div>
           ) : sortedWines.length > 0 ? (
-            sortedWines.map((wine) => (
-              <WineCard
-                key={wine.id}
-                wine={{
-                  ...wine,
-                  avgRating: parseFloat(wine.avgRating.toFixed(1)), // ✅ 소수점 1자리까지 표시
-                }}
-              />
-            ))
+            sortedWines.map((wine) => <WineCard key={wine.id} wine={wine} />)
           ) : (
             <div className="text-gray-500 text-center">
               검색 결과가 없습니다.
@@ -254,6 +303,41 @@ export default function WineList() {
         onSubmit={handleAddWine}
         isEditMode={false}
       />
+
+      {isMobile && (
+        <div className=" inset-0 flex flex-col items-center justify-end md:hidden z-50 pointer-events-auto">
+          {/* ✅ 필터 모달 */}
+          {isFilterOpen && (
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center md:hidden pointer-events-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <ModalFilter
+                isOpen={isFilterOpen}
+                setIsOpen={setIsFilterOpen}
+                selectedType={selectedType}
+                setSelectedType={setSelectedType}
+                minPrice={minPrice}
+                setMinPrice={setMinPrice}
+                maxPrice={maxPrice}
+                setMaxPrice={setMaxPrice}
+                selectedRating={selectedRating}
+                setSelectedRating={setSelectedRating}
+              />
+            </div>
+          )}
+
+          {/* ✅ 와인 등록하기 버튼 (하단 고정) */}
+          {isMobile && !isFilterOpen && user && !isModalOpen && (
+            <button
+              className="fixed bottom-4 left-1/2 transform -translate-x-1/2 w-[90%] max-w-[320px] py-3 bg-[#6A42DB] text-white rounded-full shadow-lg z-50"
+              onClick={() => setIsModalOpen(true)}
+            >
+              와인 등록하기
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

@@ -17,9 +17,9 @@ const RatingFilter = ({
   const ratings = [
     { label: "전체", value: "all" },
     { label: "4.5 - 5.0", value: "4.5-5.0" },
-    { label: "4.0 - 4.5", value: "4.0-4.5" },
-    { label: "3.5 - 4.0", value: "3.5-4.0" },
-    { label: "3.0 - 3.5", value: "3.0-3.5" },
+    { label: "4.0 - 4.5", value: "4.0-4.4" },
+    { label: "3.5 - 4.0", value: "3.5-3.9" },
+    { label: "3.0 - 3.5", value: "3.0-3.4" },
   ];
 
   return (

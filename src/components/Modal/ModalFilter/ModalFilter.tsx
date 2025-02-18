@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { X } from "lucide-react";
 import WineTypeSelector from "@/components/filter/WineTypeSelector";
 import PriceSlider from "@/components/filter/PriceSlider";
@@ -9,21 +8,32 @@ import RatingFilter from "@/components/filter/RatingFilter";
 interface ModalFilterProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedType: "RED" | "WHITE" | "SPARKLING" | "ALL";
+  setSelectedType: React.Dispatch<
+    React.SetStateAction<"RED" | "WHITE" | "SPARKLING" | "ALL">
+  >;
+  minPrice: number;
+  setMinPrice: React.Dispatch<React.SetStateAction<number>>;
+  maxPrice: number;
+  setMaxPrice: React.Dispatch<React.SetStateAction<number>>;
+  selectedRating: string;
+  setSelectedRating: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const ModalFilter: React.FC<ModalFilterProps> = ({ isOpen, setIsOpen }) => {
-  // ✅ 초기값 설정: minPrice = 0, maxPrice = 1,000,000
-  const [selectedType, setSelectedType] = useState<
-    "RED" | "WHITE" | "SPARKLING" | "ALL"
-  >("ALL");
-
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(1000000);
-  const [selectedRating, setSelectedRating] = useState("all");
-
-  // 초기화 버튼 클릭 시 기본값으로 리셋
+const ModalFilter: React.FC<ModalFilterProps> = ({
+  isOpen,
+  setIsOpen,
+  selectedType,
+  setSelectedType,
+  minPrice,
+  setMinPrice,
+  maxPrice,
+  setMaxPrice,
+  selectedRating,
+  setSelectedRating,
+}) => {
   const handleReset = () => {
-    setSelectedType("WHITE");
+    setSelectedType("ALL");
     setMinPrice(0);
     setMaxPrice(1000000);
     setSelectedRating("all");
@@ -32,9 +42,8 @@ const ModalFilter: React.FC<ModalFilterProps> = ({ isOpen, setIsOpen }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center md:hidden">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center md:hidden z-50">
       <div className="bg-white w-[90%] max-w-[375px] p-6 rounded-lg shadow-lg">
-        {/* 헤더 */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">필터</h2>
           <button onClick={() => setIsOpen(false)}>
@@ -42,7 +51,6 @@ const ModalFilter: React.FC<ModalFilterProps> = ({ isOpen, setIsOpen }) => {
           </button>
         </div>
 
-        {/* 필터 옵션 */}
         <WineTypeSelector
           selectedType={selectedType}
           setSelectedType={setSelectedType}
@@ -60,7 +68,6 @@ const ModalFilter: React.FC<ModalFilterProps> = ({ isOpen, setIsOpen }) => {
           setSelectedRating={setSelectedRating}
         />
 
-        {/* 버튼 */}
         <div className="flex justify-between mt-6">
           <button
             onClick={handleReset}
@@ -68,7 +75,10 @@ const ModalFilter: React.FC<ModalFilterProps> = ({ isOpen, setIsOpen }) => {
           >
             초기화
           </button>
-          <button className="w-3/4 py-3 bg-[#6A42DB] text-white rounded-lg">
+          <button
+            onClick={() => setIsOpen(false)}
+            className="w-3/4 py-3 bg-[#6A42DB] text-white rounded-lg"
+          >
             필터 적용하기
           </button>
         </div>
