@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Button from "@/components/Button/button";
 import { Input, InputFile, InputSelect, Label } from "@/components/Input";
 import { uploadImage } from "@/lib/api/image";
-import { useRouter } from "next/navigation";
 
 type ModalWineFormProps = {
   initialData?: {
@@ -44,7 +43,6 @@ export default function ModalWineAddForm({
   // 수정된 부분
   const [formData, setFormData] = useState(initialData);
   const [file, setFile] = useState<File | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     if (isEditMode && initialData.image) {
@@ -99,7 +97,7 @@ export default function ModalWineAddForm({
       await onSubmit(wineData);
 
       // 성공적으로 저장되면 상세 페이지로 리디렉션 (POST 요청이 완료되면 상세 페이지로 이동)
-      router.push("/");
+      //router.push("/");
       onClose();
     } catch (error) {
       console.error("와인 정보 저장 실패", error);
