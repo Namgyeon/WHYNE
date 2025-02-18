@@ -119,14 +119,13 @@ export default function WineList() {
     }
 
     try {
-      // ✅ 불필요한 id, avgRating 제거
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { id, avgRating, ...validWineData } = wineData;
 
       // ✅ API 요청 데이터 확인 (id, avgRating 없는지 체크)
       console.log("📤 API 요청 데이터:", wineData);
       const createdWine = await createWine(validWineData);
-      alert("🍷 새로운 와인이 등록되었습니다.");
+      showToast("🍷 새로운 와인이 등록되었습니다.");
       setWines((prevWines) => [
         {
           ...createdWine,
@@ -207,8 +206,8 @@ export default function WineList() {
       )}
 
       {/* ✅ 검색창 & 정렬 옵션 */}
-      <div className="md:flex-1 flex flex-col gap-6">
-        <div className="relative w-[343px] sm:w-[600px] xl:w-[800px]">
+      <div className="md:flex-1 flex flex-col justify-center gap-6">
+        <div className="relative w-[343px] sm:w-[700px] xl:w-[800px] mx-auto">
           <Icon
             name="search"
             size={24}
@@ -225,7 +224,7 @@ export default function WineList() {
 
         {isMobile && (
           <button
-            className="ml-3 md:p-2 w-fit text-white rounded-lg flex items-center justify-center"
+            className="ml-5 sm:ml-2 md:p-2 w-fit text-white rounded-lg flex items-center justify-center"
             onClick={() => setIsFilterOpen(true)}
           >
             <Image
@@ -260,7 +259,7 @@ export default function WineList() {
         )}
 
         {/* ✅ 정렬 필터 */}
-        <div className="flex space-x-6 text-gray-500 text-sm md:text-lg justify-end">
+        <div className="flex space-x-6 text-gray-500 text-sm md:text-lg justify-end mr-9">
           {["많은 리뷰", "높은 가격순", "낮은 가격순", "추천순"].map(
             (option) => (
               <button
@@ -275,7 +274,7 @@ export default function WineList() {
         </div>
 
         {/* ✅ 와인 리스트 */}
-        <div className="grid grid-cols-1 gap-[62px]">
+        <div className="grid grid-cols-1 mx-auto gap-[62px]">
           {loading ? (
             <div>Loading...</div>
           ) : error ? (
@@ -324,7 +323,7 @@ export default function WineList() {
           {/* ✅ 와인 등록하기 버튼 (하단 고정) */}
           {isMobile && !isFilterOpen && user && !isModalOpen && (
             <button
-              className="fixed bottom-4 left-1/2 transform -translate-x-1/2 w-[90%] max-w-[320px] py-3 bg-[#6A42DB] text-white rounded-full shadow-lg z-50"
+              className="fixed bottom-4 left-1/2 transform -translate-x-1/2 w-[90%] max-w-[320px] py-3 bg-[#6A42DB] text-white rounded-xl z-50"
               onClick={() => setIsModalOpen(true)}
             >
               와인 등록하기

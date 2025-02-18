@@ -114,7 +114,7 @@ export default function MonthlyChart() {
           className="absolute left-[75%] sm:left-[88%] md:left-[90%] top-1/2 w-[70px] h-[70px] p-0 z-10 flex items-center justify-center border-none bg-transparent"
         >
           <Image
-            src="/images/common/Frame 68.png"
+            src="/images/common/Frame right.png"
             alt="Frame 68"
             width={40}
             height={40}
