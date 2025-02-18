@@ -31,7 +31,7 @@ type ReviewData = {
 
 type ModalReviewFormProps = {
   onClose: () => void;
-  onSuccess: (newReviewId: number) => void;
+  onSuccess?: (newReviewId: number) => void;
   initialReviewId?: number;
   initialWineId?: number;
 };
@@ -134,7 +134,7 @@ export default function ModalReviewForm({
     if (reviewId && isEditMode) {
       fetchReviewData(reviewId);
     }
-  }, [reviewId, isEditMode]);
+  }, [reviewId, isEditMode, fetchReviewData]); // useEffect 의존성 배열에 fetchReviewData 추가
 
   // ✅ `wineId`가 존재할 경우에만 `fetchWineById` 실행
   useEffect(() => {
@@ -145,7 +145,7 @@ export default function ModalReviewForm({
           return;
         }
         console.log("✅ fetchWineById 실행:", wineId);
-        const response = await fetchWineById(String(wineId));
+        const response = await fetchWineById(wineId);
         setWine({
           id: response.id,
           name: response.name,
@@ -164,7 +164,7 @@ export default function ModalReviewForm({
     }
   }, [reviewId, isEditMode, fetchReviewData]);
 
-  // ✅ `initialReviewId`가 있으면 수정 모드 활성화
+  // `initialReviewId`가 있으면 수정 모드 활성화
   useEffect(() => {
     if (initialReviewId) {
       setReviewId(initialReviewId);
@@ -208,11 +208,13 @@ export default function ModalReviewForm({
         showToast("리뷰가 성공적으로 등록되었습니다.", "success");
       }
       onClose();
-      onSuccess(response.id);
+      if (onSuccess) {
+        onSuccess(response.id);
+      }
     } catch (error) {
       console.error("리뷰 등록 실패:", error);
       if (error instanceof AxiosError) {
-        console.error("리뷰 수정 실패:", error.response?.data);
+        showToast("리뷰 등록에 실패했습니다", "error");
       }
     }
   };

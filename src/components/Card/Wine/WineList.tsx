@@ -105,17 +105,20 @@ export default function WineList() {
 
   // ✅ 와인 추가 후 리스트 업데이트
   const handleAddWine = async (wineData: {
+    id?: number;
     name: string;
     region: string;
     image: string;
     price: number;
     type: "RED" | "WHITE" | "SPARKLING";
+    avgRating?: number; // ✅ avgRating을 optional로 정의
   }) => {
     if (!user) {
       showToast("로그인이 필요합니다.", "error");
       return;
     }
 
+<<<<<<< HEAD
     const formattedWineData = {
       name: wineData.name,
       region: wineData.region,
@@ -133,6 +136,17 @@ export default function WineList() {
       const createdWine = await createWine(formattedWineData);
       showToast("🍷 새로운 와인이 등록되었습니다.", "success");
 
+=======
+    try {
+      // ✅ 불필요한 id, avgRating 제거
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { id, avgRating, ...validWineData } = wineData;
+
+      // ✅ API 요청 데이터 확인 (id, avgRating 없는지 체크)
+      console.log("📤 API 요청 데이터:", wineData);
+      const createdWine = await createWine(validWineData);
+      alert("🍷 새로운 와인이 등록되었습니다.");
+>>>>>>> ee58dff24132e8fc9151deee7358533f7946533c
       setWines((prevWines) => [
         {
           ...createdWine,
