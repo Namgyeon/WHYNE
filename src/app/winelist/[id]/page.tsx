@@ -23,9 +23,6 @@ export default function Page() {
     ? parseInt(id[0] ?? "", 10)
     : parseInt(id ?? "", 10) || 0;
 
-  console.log("와인아이디", wineId);
-  console.log("리뷰아이디들", reviewsId);
-
   // 와인의 리뷰ID들을 reviewsId에 저장.
   const fetchWineReviews = async () => {
     try {
@@ -46,7 +43,7 @@ export default function Page() {
 
   useEffect(() => {
     fetchWineReviews();
-  }, []); // wineId가 변경될 때만 실행
+  }, []);
 
   if (isLoading) {
     return <p>로딩 중...</p>; // 로그인 상태 확인 중일 때 로딩 UI

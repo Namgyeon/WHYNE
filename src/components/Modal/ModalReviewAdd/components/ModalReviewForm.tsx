@@ -11,13 +11,6 @@ import { createReview, fetchReviewById, updateReview } from "@/lib/api/review";
 import { AxiosError } from "axios";
 import { showToast } from "@/components/Toast/Toast";
 
-// 1.와인 리뷰에 필요한 값들을 상태값으로 정리.
-// 2.(rating,content)값은 ModalReviewRate컴포넌트 / (lightBold, smoothTannic, drySweet, softAcidic)값은 ModalReviewFlavor 컴포넌트 / (aroma[])값은 ModalReviewSmell 컴포넌트
-// 3. 각 컴포넌트에서 값을 전달 받아 최종적으로 ModalReviewForm 컴포넌트에서 POST요청을 할 수 있도록 설계.
-
-// 상태값들은 깊어야 2단계정도 prop으로 내려주기 때문에 context사용은 보류 3단계면 사용해야 한다고 판단.
-// 리팩토링때 좀 더 쉬운 방법 고안.
-
 type ReviewData = {
   rating: number;
   lightBold: number;
@@ -90,7 +83,6 @@ export default function ModalReviewForm({
     if (initialWineId) {
       setWineId(initialWineId);
     } else if (paramWineId) {
-      console.log("🔄 paramWineId 사용:", paramWineId);
       setWineId(Number(paramWineId)); // ✅ paramWineId를 wineId로 설정
     }
   }, [initialWineId, paramWineId]);
@@ -100,7 +92,6 @@ export default function ModalReviewForm({
       if (!reviewId || !isEditMode) return;
       try {
         const response = await fetchReviewById(reviewId);
-        console.log("기존리뷰 데이터 가져오기:", response);
 
         setValues((prev) => ({
           ...prev,
@@ -141,10 +132,8 @@ export default function ModalReviewForm({
     const fetchWine = async () => {
       try {
         if (!wineId || wineId === 0) {
-          console.log("🚨 fetchWineById 실행 안 함 - wineId가 0임");
           return;
         }
-        console.log("✅ fetchWineById 실행:", wineId);
         const response = await fetchWineById(Number(wineId));
         setWine({
           id: response.id,
@@ -175,7 +164,6 @@ export default function ModalReviewForm({
   // ✅ 리뷰 저장 & 수정 API 요청
   const onSubmit = async () => {
     if (!wine.id || wine.id === 0) {
-      console.log("wine.id=", wine.id);
       alert("와인 정보를 불러오는 중입니다. 잠시만 기다려 주세요.");
       return;
     }
