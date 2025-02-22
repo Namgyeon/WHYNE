@@ -97,8 +97,7 @@
 ## 👀 프로젝트 미리보기
 
 ### 1. 메인 렌딩 페이지 (/)
-![Uploading 1 (2).gif…]()
-
+![1 (2)](https://github.com/user-attachments/assets/d2b64d9d-183b-470b-abb8-bce1e81c412f)
 
 <br><br>
 
