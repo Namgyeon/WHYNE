@@ -97,31 +97,27 @@
 ## 👀 프로젝트 미리보기
 
 ### 1. 메인 렌딩 페이지 (/)
-![1](https://github.com/user-attachments/assets/bdd2108e-8f7a-425d-b2ea-2c395296cdd9)
+![1 (1)](https://github.com/user-attachments/assets/cea56833-fc74-4259-9063-df01608bc109)
 
 <br><br>
 
 ### 2. 로그인 페이지 (/signin)
-![2](https://github.com/user-attachments/assets/30f053e6-8150-47a7-90a8-bc330d5db647)
+![2 (1)](https://github.com/user-attachments/assets/c4cfbc8c-50a4-4935-a61e-08440dbba00f)
 
 <br><br>
 
 ### 3. 회원가입 페이지 (/signup)
-![3](https://github.com/user-attachments/assets/8d2e986a-4b37-44a3-8b02-2d55d4de764c)
 
 <br><br>
 
 ### 4. 와인 목록 페이지 (/winelist)
-![4](https://github.com/user-attachments/assets/95670628-d8d1-4f2f-b332-b9097adfaf51)
 
 <br><br>
 
 ### 5. 와인 상세 페이지 (/winelist/{windid})
-![5](https://github.com/user-attachments/assets/2d486f96-982f-4b91-9717-5212866b18f7)
 
 <br><br>
 
 ### 6. 내 프로필 페이지 (/myprofile)
-![6](https://github.com/user-attachments/assets/542ea928-9f14-44c5-9347-a6568dcd9019)
 
 <br><br>
