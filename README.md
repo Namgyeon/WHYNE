@@ -51,22 +51,22 @@
 - 프로젝트 전반적인 관리
 - 발표 자료 준비
 - 페이지 : 마이 프로필
-- 공통 컴포넌트 : Button, Modal - 투버튼, Card - my, Card - review
+- 공용 컴포넌트 : Button, Modal - 투버튼, Card - my, Card - review
 - 기능
   - axios 이용한 api 추상화
   - 내가 작성한 후기, 내가 등록한 와인 탭 클릭시 각 항목에 맞는 카드 리스트 출력
-  - 각 항목의 카드의 햄버거 버튼 클릭 시 수정, 삭제하기 기능
+  - 각 항목의 카드의 케밥 버튼 클릭 시 수정, 삭제하기 기능
 
 ### 👨‍💻 서경수
 
 - git, vercel 관리
 - 발표 자료 준비
 - 페이지 : 메인 랜딩 페이지, 와인 목록 페이지
-- 공통 : Modal -필터, Filter, Floavor, Card - wine, Card - monthly
+- 공용 컴포넌트 : Modal -필터, Filter, Floavor, Card - wine, Card - monthly
 - 기능
   - 상단 추천 와인 랜덤 출력
   - 와인 목록 검색 기능
-  - 타임, 가격, 별점으로 와인을 필터링
+  - 타입, 가격, 별점으로 와인을 필터링
   - 와인 카드를 클릭시 해당 와인의 상세 페이지로 이동
   - 와인 맛, 향을 입력 기능
   - 초기값으로 와인 전체 타입도 볼 수 있게 수정
@@ -75,49 +75,55 @@
 
 - 발표 자료 준비
 - 페이지 : 와인 상세 페이지
-- 공통 : Modal - 리뷰 등록/ 수정, Icon, Card - mylist, Card - detail
+- 공용 컴포넌트 : Modal - 리뷰 등록/ 수정, Icon, Card - mylist, Card - detail
 - 기능
   - 아이콘 컴포넌트 화
   - 와인 상세 정보와 리뷰 목록 출력
   - 리뷰 등록/수정 클릭시 리뷰 등록/수정 기능을 가진 모달 생성
+  - 리뷰 수정시, 날짜 입력 옆에 "(수정됨)" 텍스트 추가
   - 기본 alert 창 대신 toast 기능 구현
 
 ### 👩‍💻 김혜선
 
 - 발표 자료 준비 및 발표
-- 페이지 : Gnb, Input, Dropdown, Modal - 와인 등록/ 수정
-- 공통 : 로그인, 회원가입 페이지
+- 페이지 : 로그인, 회원가입 페이지
+- 공용 컴포넌트 : Gnb, Input, Dropdown, Modal - 와인 등록/ 수정
 - 기능
   - Gnb에서 사용자 로그인 상태에 따라 다른 값 출력
   - 로그인, 회원가입 유효성 검사
   - 카카오 로그인 연결
   - 와인 등록/수정 클릭시 와인 등록/수정 기능을 가진 모달 생성
+  - 마이프로필 : 프로필 사진, 닉네임 수정 기능
     <br><br>
 
 ## 👀 프로젝트 미리보기
 
 ### 1. 메인 렌딩 페이지 (/)
-![1 (2)](https://github.com/user-attachments/assets/d2b64d9d-183b-470b-abb8-bce1e81c412f)
+![1 (3)](https://github.com/user-attachments/assets/c06c1937-6117-425e-ada9-47ff59498177)
 
 <br><br>
 
 ### 2. 로그인 페이지 (/signin)
-
+![2 (2)](https://github.com/user-attachments/assets/b3fbae50-7662-496b-b7b5-c948cc4ea4f1)
 
 <br><br>
 
 ### 3. 회원가입 페이지 (/signup)
+![3 (1)](https://github.com/user-attachments/assets/0263f9f5-47b9-48b7-9300-2bc4c6211e43)
 
 <br><br>
 
 ### 4. 와인 목록 페이지 (/winelist)
+![4 (1)](https://github.com/user-attachments/assets/9ccbbaf4-1859-4c61-b60b-ee42a76a9818)
 
 <br><br>
 
 ### 5. 와인 상세 페이지 (/winelist/{windid})
+![5 (1)](https://github.com/user-attachments/assets/325303f1-0086-475c-a627-5e5084e89a9f)
 
 <br><br>
 
 ### 6. 내 프로필 페이지 (/myprofile)
+![6 (1)](https://github.com/user-attachments/assets/c19559b6-c080-4049-b479-3a32588cb83e)
 
 <br><br>
