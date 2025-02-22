@@ -97,12 +97,13 @@
 ## 👀 프로젝트 미리보기
 
 ### 1. 메인 렌딩 페이지 (/)
-![1 (1)](https://github.com/user-attachments/assets/cea56833-fc74-4259-9063-df01608bc109)
+![Uploading 1 (2).gif…]()
+
 
 <br><br>
 
 ### 2. 로그인 페이지 (/signin)
-![2 (1)](https://github.com/user-attachments/assets/c4cfbc8c-50a4-4935-a61e-08440dbba00f)
+
 
 <br><br>
 
