@@ -26,10 +26,10 @@ export const updateUserProfile = async (nickname: string, imageUrl: string) => {
 };
 
 // ✅ 내가 작성한 리뷰 조회
-export const fetchMyReviews = async (limit: number, cursor?: string) => {
+export const fetchMyReviews = async (limit: number, cursor?: number | null) => {
   try {
-    const params: { limit: number; cursor?: string } = { limit };
-    if (cursor) params.cursor = cursor; // cursor 값이 있을 때만 추가
+    const params: { limit: number; cursor?: number } = { limit };
+    if (cursor !== null) params.cursor = cursor; // ✅ cursor가 null이면 요청에서 제외
 
     const response = await apiClient.get("/users/me/reviews", { params });
     return response.data;
@@ -44,10 +44,10 @@ export const fetchMyReviews = async (limit: number, cursor?: string) => {
 };
 
 // ✅ 내가 만든 와인 목록 조회
-export const fetchMyWines = async (limit: number, cursor?: string) => {
+export const fetchMyWines = async (limit: number, cursor?: number) => {
   try {
-    const params: { limit: number; cursor?: string } = { limit };
-    if (cursor) params.cursor = cursor; // cursor 값이 있을 때만 추가
+    const params: { limit: number; cursor?: number } = { limit };
+    if (cursor !== null) params.cursor = cursor; // cursor 값이 있을 때만 추가
 
     const response = await apiClient.get("/users/me/wines", { params });
     return response.data;

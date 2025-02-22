@@ -1,18 +1,26 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 
 interface ProfileDisplayProps {
-  image: string;
+  image?: string;
   nickname: string;
   updatedAt: string; // 마지막 업데이트 시간 (ISO 형식)
+  isEdited?: boolean;
 }
+
+const DEFAULT_PROFILE_IMAGE = "/images/common/no_profile.svg";
 
 const ProfileDisplay: React.FC<ProfileDisplayProps> = ({
   image,
   nickname,
   updatedAt,
+  isEdited,
 }) => {
+  const profileImage =
+    image && image.trim() !== "" ? image : DEFAULT_PROFILE_IMAGE;
+
   const getTimeAgo = (dateString: string) => {
     const updatedDate = new Date(dateString);
     const now = new Date();
@@ -49,10 +57,19 @@ const ProfileDisplay: React.FC<ProfileDisplayProps> = ({
 
   return (
     <div className="flex items-center gap-3">
-      <img src={image} alt="Profile" className="w-10 h-10 rounded-full" />
+      <Image
+        src={profileImage}
+        alt="Profile"
+        width={40}
+        height={40}
+        className="w-10 h-10 rounded-full"
+      />
       <div className="flex flex-col">
         <span className="text-lg font-semibold">{nickname}</span>
-        <span className="text-gray-500 text-sm">{getTimeAgo(updatedAt)}</span>
+        <div className="flex gap-2">
+          <span className="text-gray-500 text-sm">{getTimeAgo(updatedAt)}</span>
+          {isEdited ? <p className="text-gray-500 text-sm">(수정됨)</p> : <></>}
+        </div>
       </div>
     </div>
   );
