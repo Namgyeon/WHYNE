@@ -100,30 +100,24 @@
 
 ### 1. 메인 렌딩 페이지 (/)
 ![1 (3)](https://github.com/user-attachments/assets/c06c1937-6117-425e-ada9-47ff59498177)
-
 <br><br>
 
 ### 2. 로그인 페이지 (/signin)
 ![2 (2)](https://github.com/user-attachments/assets/b3fbae50-7662-496b-b7b5-c948cc4ea4f1)
-
 <br><br>
 
 ### 3. 회원가입 페이지 (/signup)
 ![3 (1)](https://github.com/user-attachments/assets/0263f9f5-47b9-48b7-9300-2bc4c6211e43)
-
 <br><br>
 
 ### 4. 와인 목록 페이지 (/winelist)
 ![4 (1)](https://github.com/user-attachments/assets/9ccbbaf4-1859-4c61-b60b-ee42a76a9818)
-
 <br><br>
 
 ### 5. 와인 상세 페이지 (/winelist/{windid})
 ![5 (1)](https://github.com/user-attachments/assets/325303f1-0086-475c-a627-5e5084e89a9f)
-
 <br><br>
 
 ### 6. 내 프로필 페이지 (/myprofile)
 ![6 (1)](https://github.com/user-attachments/assets/c19559b6-c080-4049-b479-3a32588cb83e)
-
 <br><br>
