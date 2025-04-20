@@ -66,3 +66,8 @@
 ![5 (1)](https://github.com/user-attachments/assets/325303f1-0086-475c-a627-5e5084e89a9f)
 <br><br>
 
+###  와인 등록 과정 
+
+![2025-04-204 47 48-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/605fabbb-492c-4f78-b400-846e17f90113)
+<br><br>
+
