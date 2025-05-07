@@ -10,6 +10,7 @@ import { fetchWineById } from "@/lib/api/wine";
 import { createReview, fetchReviewById, updateReview } from "@/lib/api/review";
 import { AxiosError } from "axios";
 import { showToast } from "@/components/Toast/Toast";
+import { useForm } from "react-hook-form";
 
 type ReviewData = {
   rating: number;
@@ -120,14 +121,14 @@ export default function ModalReviewForm({
     [isEditMode, initialWineId]
   );
 
-  // ✅ `reviewId`가 변경될 때 기존 리뷰 데이터를 가져옴
+  // `reviewId`가 변경될 때 기존 리뷰 데이터를 가져옴
   useEffect(() => {
     if (reviewId && isEditMode) {
       fetchReviewData(reviewId);
     }
   }, [reviewId, isEditMode, fetchReviewData]);
 
-  // ✅ `wineId`가 존재할 경우에만 `fetchWineById` 실행
+  // `wineId`가 존재할 경우에만 `fetchWineById` 실행
   useEffect(() => {
     const fetchWine = async () => {
       try {
@@ -144,7 +145,7 @@ export default function ModalReviewForm({
         console.error("❌ 와인 데이터를 가져오는 중 오류 발생:", error);
       }
     };
-    if (wineId) fetchWine(); // ✅ wineId가 있을 때만 실행
+    if (wineId) fetchWine(); // wineId가 있을 때만 실행
   }, [wineId]);
 
   useEffect(() => {
@@ -161,7 +162,7 @@ export default function ModalReviewForm({
     }
   }, [initialReviewId]);
 
-  // ✅ 리뷰 저장 & 수정 API 요청
+  // 리뷰 저장 & 수정 API 요청
   const onSubmit = async () => {
     if (!wine.id || wine.id === 0) {
       alert("와인 정보를 불러오는 중입니다. 잠시만 기다려 주세요.");

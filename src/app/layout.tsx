@@ -3,6 +3,7 @@ import MetaTags from "./MetaTags";
 import "@/styles/globals.css";
 import { OAuthAppProvider } from "@/context/OAuthAppProvider";
 import { AuthProvider } from "@/context/AuthProvider";
+import TanStackProvider from "./providers/ReactQueryProvider";
 
 const pretendard = localFont({
   src: "../../public/fonts/PretendardVariable.woff2",
@@ -25,9 +26,11 @@ export default function RootLayout({
         <title>WHYNE</title>
       </head>
       <body>
-        <OAuthAppProvider>
-          <AuthProvider>{children}</AuthProvider>
-        </OAuthAppProvider>
+        <TanStackProvider>
+          <OAuthAppProvider>
+            <AuthProvider>{children}</AuthProvider>
+          </OAuthAppProvider>
+        </TanStackProvider>
       </body>
     </html>
   );

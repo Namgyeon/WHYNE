@@ -2,9 +2,6 @@
 import { useEffect } from "react";
 import ModalReviewForm from "./components/ModalReviewForm";
 
-// import ModalReviewForm from "./components/ModalReviewForm";
-// import ModalReviewHeader from "./components/ModalReviewHeader";
-
 type ModalReviewAddProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -44,7 +41,7 @@ export default function ModalReviewAdd({
           onClose={onClose}
           onSuccess={(newReviewId) => {
             if (onSuccess) {
-              onSuccess(newReviewId); // ✅ newReviewId 전달!
+              onSuccess(newReviewId); //
             }
           }}
           initialReviewId={initialReviewId}

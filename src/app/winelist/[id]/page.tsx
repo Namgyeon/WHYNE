@@ -10,6 +10,7 @@ import Button from "@/components/Button/button";
 import ModalReviewAdd from "@/components/Modal/ModalReviewAdd/ModalReviewAdd";
 import { useAuth } from "@/context/AuthProvider";
 import { useRouter } from "next/navigation";
+import useReviews from "@/hooks/useReviews";
 
 export default function Page() {
   const [reviewsId, setReviewsId] = useState<number[]>([]);
@@ -23,16 +24,15 @@ export default function Page() {
     ? parseInt(id[0] ?? "", 10)
     : parseInt(id ?? "", 10) || 0;
 
-  // 와인의 리뷰ID들을 reviewsId에 저장.
-  const fetchWineReviews = async () => {
-    try {
-      const wineData = await fetchWineById(wineId);
-      setReviewsId(wineData.reviews.map((review: { id: number }) => review.id)); // api요청으로 가져온 리뷰아이디들을 상태값으로 변경.
-    } catch (error) {
-      console.error("페이지 리뷰를 가져오는데 실패했습니다", error);
-      return [];
+  const { data: reviewList, isLoading: reviewsLoading } = useReviews(wineId);
+
+  useEffect(() => {
+    if (reviewList) {
+      console.log("리뷰 아이디", reviewList.reviews);
+      const ids = reviewList.reviews.map((r: { id: number }) => r.id);
+      setReviewsId(ids);
     }
-  };
+  }, [reviewList]);
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -41,12 +41,8 @@ export default function Page() {
     }
   }, [user, isLoading, router]);
 
-  useEffect(() => {
-    fetchWineReviews();
-  }, []);
-
   if (isLoading) {
-    return <p>로딩 중...</p>; // 로그인 상태 확인 중일 때 로딩 UI
+    return <p>로딩 중...</p>;
   }
 
   if (!user) {
@@ -58,7 +54,6 @@ export default function Page() {
       <div className="w-full mt-[30px] mb-[40px] md:mt-[62px] md:mb-[60px]">
         <CardDetail id={wineId} />
       </div>
-      {/* 리뷰가 1개라도 있어야 데이터 보여줌. */}
       {reviewsId.length > 0 ? (
         <div className="flex flex-col gap-[60px] justify-between lg:flex-row">
           <div className="flex-1 w-full order-last lg:order-first">
