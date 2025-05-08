@@ -7,7 +7,7 @@ import ModalReviewHeader from "./ModalReviewHeader";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { fetchWineById } from "@/lib/api/wine";
-import { createReview, fetchReviewById, updateReview } from "@/lib/api/review";
+import { fetchReviewById, updateReview } from "@/lib/api/review";
 import { AxiosError } from "axios";
 import { showToast } from "@/components/Toast/Toast";
 import useCreateReview from "@/hooks/useCreateReview";

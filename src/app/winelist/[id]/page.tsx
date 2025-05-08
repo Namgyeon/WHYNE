@@ -4,7 +4,6 @@ import { useParams } from "next/navigation";
 import ReviewStats from "./components/ReviewStats";
 import ReviewList from "./components/ReviewList";
 import { useState, useEffect } from "react";
-import { fetchWineById } from "@/lib/api/wine";
 import Image from "next/image";
 import Button from "@/components/Button/button";
 import ModalReviewAdd from "@/components/Modal/ModalReviewAdd/ModalReviewAdd";
