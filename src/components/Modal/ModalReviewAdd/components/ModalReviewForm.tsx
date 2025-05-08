@@ -189,11 +189,12 @@ export default function ModalReviewForm({
     }
 
     try {
-      let response;
       if (isEditMode) {
         // 수정 요청 PATCH
-        response = await updateReview(reviewId!, reviewData);
+        const updated = await updateReview(reviewId!, reviewData);
         showToast("리뷰가 수정되었습니다.", "success");
+        onClose();
+        onSuccess(updated.id);
       }
       if (!isEditMode && reviewData.wineId !== undefined) {
         createMutate(reviewData, {
