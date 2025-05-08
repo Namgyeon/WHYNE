@@ -9,16 +9,21 @@ interface ReviewData {
   softAcidic: number; // 산미
   aroma: string[]; // 향
   content: string; // 내용
-  wineId: number; // 와인id
 }
 
-export default function useCreateReview() {
+interface CreateReviewPayload extends ReviewData {
+  wineId: number;
+}
+
+export default function useCreateReview(wineId: number) {
   const queryClient = useQueryClient();
 
-  const uploadReviewMutation = useMutation({
-    mutationFn: (reviewData: ReviewData) => createReview(reviewData),
+  return useMutation({
+    mutationFn: (reviewData: CreateReviewPayload) => createReview(reviewData),
     onSuccess: () => {
-      queryClient.invalidateQueries;
+      queryClient.invalidateQueries({
+        queryKey: ["reviews", wineId],
+      });
     },
   });
 }

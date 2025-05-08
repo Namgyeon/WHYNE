@@ -10,18 +10,21 @@ import { fetchWineById } from "@/lib/api/wine";
 import { createReview, fetchReviewById, updateReview } from "@/lib/api/review";
 import { AxiosError } from "axios";
 import { showToast } from "@/components/Toast/Toast";
-import { useForm } from "react-hook-form";
+import useCreateReview from "@/hooks/useCreateReview";
 
-type ReviewData = {
-  rating: number;
-  lightBold: number;
-  smoothTannic: number;
-  drySweet: number;
-  softAcidic: number;
-  aroma: string[];
-  content: string;
-  wineId?: number;
-};
+interface ReviewData {
+  rating: number; // 평점
+  lightBold: number; // 바디감
+  smoothTannic: number; // 타닌
+  drySweet: number; // 당도
+  softAcidic: number; // 산미
+  aroma: string[]; // 향
+  content: string; // 내용
+}
+
+interface CreateReviewPayload extends ReviewData {
+  wineId: number;
+}
 
 type ModalReviewFormProps = {
   onClose: () => void;
@@ -72,6 +75,10 @@ export default function ModalReviewForm({
     aroma: [],
     wineId: 0,
   });
+
+  const { mutate: createMutate, isError: createError } = useCreateReview(
+    wineId ?? 0
+  );
 
   const { id } = useParams();
   const paramWineId = Array.isArray(id) ? id[0] : id; //변수중복 방지
@@ -168,7 +175,7 @@ export default function ModalReviewForm({
       alert("와인 정보를 불러오는 중입니다. 잠시만 기다려 주세요.");
       return;
     }
-    const reviewData: ReviewData = {
+    const reviewData: CreateReviewPayload = {
       rating: values.rating,
       lightBold: values.lightBold,
       smoothTannic: values.smoothTannic,
@@ -176,6 +183,7 @@ export default function ModalReviewForm({
       softAcidic: values.softAcidic,
       aroma: values.aroma,
       content: values.content,
+      wineId: values.wineId,
     };
 
     if (!isEditMode) {
@@ -190,16 +198,13 @@ export default function ModalReviewForm({
         showToast("리뷰가 수정되었습니다.", "success");
       }
       if (!isEditMode && reviewData.wineId !== undefined) {
-        response = await createReview({
-          ...reviewData,
-          wineId: reviewData.wineId,
+        createMutate(reviewData, {
+          onSuccess: (res) => {
+            showToast("리뷰가 성공적으로 등록되었습니다.", "success");
+            onClose();
+            onSuccess(res.id);
+          },
         });
-        showToast("리뷰가 성공적으로 등록되었습니다.", "success");
-      }
-      onClose();
-      if (onSuccess) {
-        onSuccess(response.id); // 📌 새 리뷰 ID를 ModalReviewAdd로 전달!
-        window.location.reload();
       }
     } catch (error) {
       console.error("리뷰 등록 실패:", error);
