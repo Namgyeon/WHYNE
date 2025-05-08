@@ -23,7 +23,7 @@ export default function Page() {
     ? parseInt(id[0] ?? "", 10)
     : parseInt(id ?? "", 10) || 0;
 
-  const { data: reviewList, isLoading: reviewsLoading } = useReviews(wineId);
+  const { data: reviewList } = useReviews(wineId);
 
   useEffect(() => {
     if (reviewList) {

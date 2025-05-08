@@ -76,9 +76,7 @@ export default function ModalReviewForm({
     wineId: 0,
   });
 
-  const { mutate: createMutate, isError: createError } = useCreateReview(
-    wineId ?? 0
-  );
+  const { mutate: createMutate } = useCreateReview(wineId ?? 0);
 
   const { id } = useParams();
   const paramWineId = Array.isArray(id) ? id[0] : id; //변수중복 방지
