@@ -4,7 +4,7 @@
 <br><br>
 
 > Codeit Sprint FE 12기 - Part3 4팀<br>
-> 배포 URL : https://fe-12-part3-team4-whyne.vercel.app/<br>
+> 배포 URL : https://whyne-tau.vercel.app/<br>
 > Copyright 2024 코드잇 Inc. All rights reserved.
 
 <br>
